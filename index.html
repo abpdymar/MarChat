@@ -284,7 +284,7 @@ video{width:100%;border-radius:12px;background:#000;}
     </div>
   </div>
   <div class="ca" id="ca">
-    <div class="empty-ca"><div class="big">💬</div><h2>ChatFlow</h2><p>Tippe auf ✉️ um einen Chat zu starten.</p></div>
+    <div class="empty-ca"><div class="big">💬</div><h2>MarChat</h2><p>Tippe auf ✉️ um einen Chat zu starten.</p></div>
   </div>
  </div>
 </div>
@@ -372,7 +372,7 @@ video{width:100%;border-radius:12px;background:#000;}
 <div class="install-banner off" id="install-banner">
   <div style="font-size:30px;flex-shrink:0;">💬</div>
   <div class="install-info">
-    <div class="install-title">ChatFlow installieren</div>
+    <div class="install-title">MarChat installieren</div>
     <div class="install-sub">Als App auf dem Homescreen speichern</div>
   </div>
   <div style="display:flex;gap:8px;flex-shrink:0;">
@@ -463,7 +463,7 @@ function initPWA(){
     e.preventDefault();deferredInstall=e;
     if(!localStorage.getItem('cf_nodismiss'))setTimeout(()=>document.getElementById('install-banner').classList.remove('off'),4000);
   });
-  window.addEventListener('appinstalled',()=>{document.getElementById('install-banner').classList.add('off');deferredInstall=null;console.log('ChatFlow installed!');});
+  window.addEventListener('appinstalled',()=>{document.getElementById('install-banner').classList.add('off');deferredInstall=null;console.log('MarChat installed!');});
 }
 function doInstall(){if(!deferredInstall)return;deferredInstall.prompt();deferredInstall.userChoice.then(r=>{deferredInstall=null;document.getElementById('install-banner').classList.add('off');console.log('Install choice:',r.outcome);});}
 function dismissInstall(){document.getElementById('install-banner').classList.add('off');localStorage.setItem('cf_nodismiss','1');}
