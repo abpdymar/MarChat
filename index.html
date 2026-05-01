@@ -420,6 +420,19 @@ let selectMode=false,selectedMsgIds=new Set();
 const aliases={},profileCache={};
 let deferredInstall=null,idb=null;
 
+// ── GELÖSCHTE NACHRICHTEN BLOCKLISTE ──
+// Speichert Supabase-IDs lokal gelöschter Nachrichten,
+// damit sie beim Sync nicht erneut in die IDB geschrieben werden.
+let deletedMsgIds=new Set(JSON.parse(localStorage.getItem('cf_deleted')||'[]'));
+function saveDeleted(){
+  // Maximal 5000 Einträge behalten um localStorage nicht zu überladen
+  if(deletedMsgIds.size>5000){
+    const arr=[...deletedMsgIds];
+    deletedMsgIds=new Set(arr.slice(arr.length-5000));
+  }
+  localStorage.setItem('cf_deleted',JSON.stringify([...deletedMsgIds]));
+}
+
 /* ══ INDEXEDDB ══ */
 function openIDB(){
   return new Promise((res,rej)=>{
@@ -446,6 +459,8 @@ const idbIdx=(s,idx,val)=>new Promise((res,rej)=>{const tx=idb.transaction(s,'re
 
 async function saveMsg(m){
   const eid=m.id||m.msg_id||'';
+  // ── FIX: Gelöschte Nachrichten nicht erneut speichern ──
+  if(eid && eid.indexOf('tmp_')!==0 && deletedMsgIds.has(eid)) return;
   if(eid&&eid.indexOf('tmp_')!==0){const ex=await idbIdx('messages','msg_id',eid);if(ex.length)return;}
   await idbPut('messages',{msg_id:eid||('tmp_'+Date.now()),conv_id:m.conv_id,sender_id:m.sender_id,sender_name:m.sender_name||'',content:m.content||'',type:m.type||'text',file_url:m.file_url||null,file_name:m.file_name||null,file_size:m.file_size||null,created_at:m.created_at||new Date().toISOString()});
 }
@@ -824,7 +839,11 @@ async function loadMsgs(cid){
   const{data}=await sb.from('messages').select('*').eq('conv_id',cid).order('created_at',{ascending:true}).limit(500);
   if(data&&data.length){
     const known=new Set(local.map(m=>m.msg_id));
-    for(const m of data){if(!known.has(m.id)){await saveMsg({...m,msg_id:m.id});}}
+    for(const m of data){
+      // ── FIX: Gelöschte Nachrichten beim Sync überspringen ──
+      if(deletedMsgIds.has(m.id)) continue;
+      if(!known.has(m.id)){await saveMsg({...m,msg_id:m.id});}
+    }
     const all=await idbIdx('messages','conv_id',cid);
     all.sort((a,b)=>new Date(a.created_at)-new Date(b.created_at));
     renderMsgs(all);scrollB();
@@ -863,6 +882,8 @@ function subMsgs(cid){
   msgSub=sb.channel('room-'+cid+'-'+Date.now())
     .on('postgres_changes',{event:'INSERT',schema:'public',table:'messages',filter:'conv_id=eq.'+cid},async p=>{
       if(me&&p.new.sender_id===me.id)return;
+      // ── FIX: Eingehende Nachrichten nicht anzeigen wenn lokal gelöscht ──
+      if(deletedMsgIds.has(p.new.id))return;
       const exists=await idbIdx('messages','msg_id',p.new.id);
       if(!exists.length){
         await saveMsg({...p.new,msg_id:p.new.id});
@@ -921,18 +942,30 @@ function exitSel(){selectMode=false;selectedMsgIds.clear();document.getElementBy
 function selectAll(){const allMsgs=document.querySelectorAll('#msgs .msg');const allSel=allMsgs.length>0&&selectedMsgIds.size===allMsgs.length;if(allSel){allMsgs.forEach(el=>el.classList.remove('selected'));selectedMsgIds.clear();}else{allMsgs.forEach(el=>{const lid=el.getAttribute('data-lid');if(lid){selectedMsgIds.add(lid);el.classList.add('selected');}});}updSelCnt();}
 function onMsgClick(el,lid){if(!selectMode)return;if(selectedMsgIds.has(lid)){selectedMsgIds.delete(lid);el.classList.remove('selected');}else{selectedMsgIds.add(lid);el.classList.add('selected');}updSelCnt();}
 function updSelCnt(){const el=document.getElementById('sel-count');if(el)el.textContent=selectedMsgIds.size+' ausgewählt';}
+
 async function delSel(){
   if(!selectedMsgIds.size){alert('Keine Nachrichten ausgewählt.');return;}
   if(!confirm(selectedMsgIds.size+' Nachricht(en) lokal löschen?'))return;
   const all=await idbIdx('messages','conv_id',activeConv.id);
   for(const lid of selectedMsgIds){
     const m=all.find(x=>String(x.local_id)===lid||x.msg_id===lid);
-    if(m){await idbDel('messages',m.local_id);const domEl=document.querySelector('#msgs .msg[data-lid="'+CSS.escape(lid)+'"]');if(domEl){const wrap=domEl.closest('.msg-wrap');if(wrap)wrap.remove();else domEl.remove();}}
+    if(m){
+      // ── FIX: Supabase-ID zur Blockliste hinzufügen damit Nachricht nicht zurückkommt ──
+      if(m.msg_id && m.msg_id.indexOf('tmp_')!==0){
+        deletedMsgIds.add(m.msg_id);
+      }
+      await idbDel('messages',m.local_id);
+      const domEl=document.querySelector('#msgs .msg[data-lid="'+CSS.escape(lid)+'"]');
+      if(domEl){const wrap=domEl.closest('.msg-wrap');if(wrap)wrap.remove();else domEl.remove();}
+    }
   }
+  // Blockliste nach dem Loop einmal speichern (effizienter als in jeder Iteration)
+  saveDeleted();
   cleanupDateSeps();exitSel();
   const cnt=(await idbIdx('messages','conv_id',activeConv.id)).length;
   const s=document.getElementById('ca-sub');if(s)s.textContent=cnt+' Nachrichten';
 }
+
 function cleanupDateSeps(){
   const w=document.getElementById('msgs');if(!w)return;
   w.querySelectorAll('.date-sep').forEach(sep=>{let next=sep.nextElementSibling;while(next&&next.classList.contains('date-sep'))next=next.nextElementSibling;if(!next||!next.classList.contains('msg-wrap'))sep.remove();});
