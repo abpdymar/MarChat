@@ -28,8 +28,6 @@
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 html,body{height:100%;font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);overflow:hidden;}
 ::selection{background:rgba(108,99,255,.3);}
-
-/* ── AUTH SCREEN ── */
 .screen{position:fixed;inset:0;z-index:50;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:16px;padding-top:calc(16px + var(--safe-top));}
 .screen.off{display:none!important;}
 .card{background:var(--s1);border:1px solid var(--border);border-radius:22px;padding:38px 32px;width:100%;max-width:420px;box-shadow:0 32px 80px rgba(0,0,0,.8);}
@@ -43,6 +41,7 @@ html,body{height:100%;font-family:'Outfit',sans-serif;background:var(--bg);color
 .btn-main{width:100%;padding:13px;border:none;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-family:'Outfit',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:opacity .2s,transform .1s;margin-top:6px;}
 .btn-main:active{transform:scale(.98);}
 .btn-main:hover{opacity:.88;}
+.btn-main:disabled{opacity:.5;cursor:not-allowed;transform:none;}
 .tabs{display:flex;gap:3px;background:var(--bg);border-radius:12px;padding:3px;margin-bottom:24px;}
 .tab{flex:1;padding:9px;border:none;border-radius:10px;cursor:pointer;font-family:'Outfit',sans-serif;font-size:14px;font-weight:500;color:var(--muted);background:transparent;transition:all .2s;}
 .tab.on{background:var(--s2);color:var(--text);}
@@ -51,16 +50,9 @@ html,body{height:100%;font-family:'Outfit',sans-serif;background:var(--bg);color
 .ok{background:rgba(37,211,102,.1);border:1px solid rgba(37,211,102,.3);color:#25d366;}
 .auth-link{color:var(--muted);font-size:12px;text-align:center;margin-top:14px;cursor:pointer;text-decoration:underline;}
 .auth-link:hover{color:var(--accent);}
-
-/* ── APP LAYOUT ── */
 #app{display:none;height:100dvh;height:100vh;}
 .layout{display:flex;height:100%;}
-.sb{
-  width:var(--sb-w);min-width:var(--sb-w);background:var(--s1);
-  border-right:1px solid var(--border);display:flex;flex-direction:column;
-  transition:transform .3s ease;z-index:10;
-  padding-top:var(--safe-top);
-}
+.sb{width:var(--sb-w);min-width:var(--sb-w);background:var(--s1);border-right:1px solid var(--border);display:flex;flex-direction:column;transition:transform .3s ease;z-index:10;padding-top:var(--safe-top);}
 .sb-top{padding:14px 14px 10px;border-bottom:1px solid var(--border);}
 .sb-head{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
 .sb-logo{font-size:20px;font-weight:800;background:linear-gradient(135deg,#6c63ff,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;flex:1;}
@@ -96,14 +88,8 @@ html,body{height:100%;font-family:'Outfit',sans-serif;background:var(--bg);color
 .ue{font-size:11px;color:var(--muted);}
 .btn-lo{padding:5px 10px;border:1.5px solid var(--border);border-radius:8px;background:transparent;color:var(--muted);font-family:'Outfit',sans-serif;font-size:12px;cursor:pointer;transition:all .2s;white-space:nowrap;}
 .btn-lo:hover{border-color:var(--danger);color:var(--danger);}
-
-/* ── CHAT AREA ── */
 .ca{flex:1;display:flex;flex-direction:column;min-width:0;background:var(--bg);position:relative;}
-.ca-head{
-  padding:12px 16px;padding-top:calc(12px + var(--safe-top));
-  background:var(--s1);border-bottom:1px solid var(--border);
-  display:flex;align-items:center;gap:10px;flex-shrink:0;
-}
+.ca-head{padding:12px 16px;padding-top:calc(12px + var(--safe-top));background:var(--s1);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-shrink:0;}
 .ca-head .back-btn{display:none;width:32px;height:32px;border-radius:9px;border:1.5px solid var(--border);background:var(--s2);align-items:center;justify-content:center;cursor:pointer;color:var(--muted);font-size:16px;flex-shrink:0;}
 .ct{font-size:14px;font-weight:700;}
 .cs{font-size:11px;color:var(--muted);}
@@ -142,12 +128,7 @@ html,body{height:100%;font-family:'Outfit',sans-serif;background:var(--bg);color
 .empty-ca .big{font-size:64px;margin-bottom:16px;opacity:.25;filter:grayscale(.3);}
 .empty-ca h2{font-size:20px;font-weight:700;color:var(--text);margin-bottom:6px;}
 .empty-msgs{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--muted);}
-.inp-bar{
-  padding:10px 12px;
-  padding-bottom:calc(10px + var(--safe-bot));
-  border-top:1px solid var(--border);background:var(--s1);
-  display:flex;gap:8px;align-items:flex-end;flex-shrink:0;
-}
+.inp-bar{padding:10px 12px;padding-bottom:calc(10px + var(--safe-bot));border-top:1px solid var(--border);background:var(--s1);display:flex;gap:8px;align-items:flex-end;flex-shrink:0;}
 .inp-bar textarea{flex:1;padding:9px 13px;border-radius:12px;border:1.5px solid var(--border);background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;outline:none;resize:none;max-height:100px;transition:border .2s;line-height:1.5;}
 .inp-bar textarea:focus{border-color:var(--accent);}
 .send{width:40px;height:40px;border-radius:12px;border:none;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:opacity .2s,transform .1s;}
@@ -155,8 +136,6 @@ html,body{height:100%;font-family:'Outfit',sans-serif;background:var(--bg);color
 .send:active{transform:scale(.92);}
 .attach-btn{width:40px;height:40px;border-radius:12px;border:1.5px solid var(--border);background:var(--s2);color:var(--muted);font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;}
 .attach-btn:hover{background:var(--s3);color:var(--text);}
-
-/* ── MODALS ── */
 .ov{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.8);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:16px;}
 .ov.off{display:none!important;}
 .modal{background:var(--s1);border:1px solid var(--border);border-radius:20px;padding:26px;width:100%;max-width:420px;box-shadow:0 30px 60px rgba(0,0,0,.6);max-height:90dvh;overflow-y:auto;}
@@ -177,22 +156,16 @@ html,body{height:100%;font-family:'Outfit',sans-serif;background:var(--bg);color
 .search-empty{text-align:center;color:var(--muted);font-size:13px;padding:14px;line-height:1.7;}
 .spinner{display:inline-block;width:16px;height:16px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg)}}
-
-/* ── PROFILE ── */
 .prof-avatar-wrap{display:flex;flex-direction:column;align-items:center;gap:8px;margin-bottom:18px;}
 .prof-av-big{width:80px;height:80px;border-radius:50%;font-size:28px;font-weight:700;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;cursor:pointer;}
 .prof-av-edit{position:absolute;bottom:0;right:0;width:26px;height:26px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:12px;}
 .upload-prog{width:100%;height:3px;background:var(--border);border-radius:2px;margin-top:4px;overflow:hidden;display:none;}
 .upload-prog-bar{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0%;transition:width .3s;}
-
-/* ── REQUEST BANNER ── */
 .req-banner{background:rgba(108,99,255,.08);border:1px solid rgba(108,99,255,.25);border-radius:14px;padding:16px;margin:12px;text-align:center;}
 .req-banner p{font-size:13px;color:var(--muted);margin-bottom:12px;line-height:1.6;}
 .req-btns{display:flex;gap:8px;justify-content:center;}
 .req-accept{padding:8px 22px;border:none;border-radius:9px;background:var(--accent);color:#fff;font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;cursor:pointer;}
 .req-decline{padding:8px 18px;border:1.5px solid var(--border);border-radius:9px;background:transparent;color:var(--muted);font-family:'Outfit',sans-serif;font-size:13px;cursor:pointer;}
-
-/* ── CALLS ── */
 .call-overlay{position:fixed;inset:0;z-index:200;background:rgba(10,10,15,.97);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:20px;padding-top:calc(20px + var(--safe-top));padding-bottom:calc(20px + var(--safe-bot));}
 .call-overlay.off{display:none!important;}
 .call-name{font-size:26px;font-weight:700;text-align:center;}
@@ -209,13 +182,7 @@ html,body{height:100%;font-family:'Outfit',sans-serif;background:var(--bg);color
 .video-wrap{position:relative;width:100%;max-width:480px;}
 video{width:100%;border-radius:12px;background:#000;}
 #local-vid{position:absolute;bottom:10px;right:10px;width:110px;border-radius:10px;z-index:5;border:2px solid var(--border);}
-.incoming-banner{
-  position:fixed;top:calc(12px + var(--safe-top));left:50%;transform:translateX(-50%);
-  z-index:300;background:var(--s1);border:1px solid var(--border);border-radius:18px;
-  padding:14px 16px;display:flex;align-items:center;gap:12px;
-  box-shadow:0 20px 40px rgba(0,0,0,.7);width:calc(100% - 24px);max-width:360px;
-  animation:slideDown .3s ease;
-}
+.incoming-banner{position:fixed;top:calc(12px + var(--safe-top));left:50%;transform:translateX(-50%);z-index:300;background:var(--s1);border:1px solid var(--border);border-radius:18px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 20px 40px rgba(0,0,0,.7);width:calc(100% - 24px);max-width:360px;animation:slideDown .3s ease;}
 @keyframes slideDown{from{transform:translateX(-50%) translateY(-120%);opacity:0}to{transform:translateX(-50%) translateY(0);opacity:1}}
 .incoming-banner.off{display:none!important;}
 .inc-info{flex:1;min-width:0;}
@@ -224,15 +191,7 @@ video{width:100%;border-radius:12px;background:#000;}
 .inc-btns{display:flex;gap:8px;flex-shrink:0;}
 .inc-accept{padding:8px 14px;border:none;border-radius:10px;background:#25d366;color:#fff;font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;cursor:pointer;}
 .inc-decline{padding:8px 14px;border:none;border-radius:10px;background:#ff5c5c;color:#fff;font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;cursor:pointer;}
-
-/* ── INSTALL BANNER ── */
-.install-banner{
-  position:fixed;bottom:calc(16px + var(--safe-bot));left:50%;transform:translateX(-50%);
-  z-index:400;background:var(--s1);border:1px solid var(--accent);border-radius:18px;
-  padding:14px 18px;display:flex;align-items:center;gap:12px;
-  box-shadow:0 20px 40px rgba(0,0,0,.7),0 0 0 1px rgba(108,99,255,.2);
-  width:calc(100% - 32px);max-width:380px;animation:slideUp .4s ease;
-}
+.install-banner{position:fixed;bottom:calc(16px + var(--safe-bot));left:50%;transform:translateX(-50%);z-index:400;background:var(--s1);border:1px solid var(--accent);border-radius:18px;padding:14px 18px;display:flex;align-items:center;gap:12px;box-shadow:0 20px 40px rgba(0,0,0,.7),0 0 0 1px rgba(108,99,255,.2);width:calc(100% - 32px);max-width:380px;animation:slideUp .4s ease;}
 @keyframes slideUp{from{transform:translateX(-50%) translateY(120%);opacity:0}to{transform:translateX(-50%) translateY(0);opacity:1}}
 .install-banner.off{display:none!important;}
 .install-info{flex:1;}
@@ -240,8 +199,6 @@ video{width:100%;border-radius:12px;background:#000;}
 .install-sub{font-size:11px;color:var(--muted);}
 .install-yes{padding:8px 15px;border:none;border-radius:10px;background:var(--accent);color:#fff;font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;cursor:pointer;}
 .install-no{padding:8px 10px;border:none;border-radius:10px;background:var(--s3);color:var(--muted);font-family:'Outfit',sans-serif;font-size:13px;cursor:pointer;}
-
-/* ── AVATAR COLORS ── */
 .a1{background:linear-gradient(135deg,#6c63ff,#a78bfa);color:#fff;}
 .a2{background:linear-gradient(135deg,#25d366,#1aad52);color:#fff;}
 .a3{background:linear-gradient(135deg,#ff6b6b,#ffa07a);color:#fff;}
@@ -250,8 +207,6 @@ video{width:100%;border-radius:12px;background:#000;}
 .a6{background:linear-gradient(135deg,#fd79a8,#e84393);color:#fff;}
 .a7{background:linear-gradient(135deg,#74b9ff,#0984e3);color:#fff;}
 .a8{background:linear-gradient(135deg,#a29bfe,#6c5ce7);color:#fff;}
-
-/* ── FILE / IMAGE ── */
 .file-msg{display:flex;align-items:center;gap:10px;padding:9px 13px;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:12px;text-decoration:none;color:var(--text);transition:background .2s;min-width:160px;max-width:240px;}
 .file-msg:hover{background:rgba(255,255,255,.1);}
 .file-icon{font-size:22px;flex-shrink:0;}
@@ -259,8 +214,6 @@ video{width:100%;border-radius:12px;background:#000;}
 .file-name{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .file-size{font-size:10px;color:var(--muted);}
 .msg-img{max-width:220px;max-height:180px;border-radius:12px;cursor:pointer;display:block;}
-
-/* ── RESPONSIVE ── */
 @media(max-width:640px){
   :root{--sb-w:100%;}
   .layout{position:relative;}
@@ -278,7 +231,6 @@ video{width:100%;border-radius:12px;background:#000;}
 </head>
 <body>
 
-<!-- ══ AUTH SCREEN ══ -->
 <div class="screen" id="s-auth">
   <div class="card">
     <div class="card-logo">💬 MarChat</div>
@@ -287,46 +239,35 @@ video{width:100%;border-radius:12px;background:#000;}
       <button class="tab on" onclick="switchTab('login')">Anmelden</button>
       <button class="tab" onclick="switchTab('register')">Registrieren</button>
     </div>
-
-    <!-- Login -->
     <div id="f-login">
       <div class="fld"><label>E-Mail</label><input type="email" id="l-email" placeholder="mail@example.com" autocomplete="email"/></div>
       <div class="fld"><label>Passwort</label><input type="password" id="l-pw" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"/></div>
-      <button class="btn-main" onclick="doLogin()">Anmelden →</button>
+      <button class="btn-main" id="btn-login" onclick="doLogin()">Anmelden →</button>
       <div class="auth-link" onclick="showForgotPw()">Passwort vergessen?</div>
     </div>
-
-    <!-- Register -->
     <div id="f-reg" style="display:none">
       <div class="fld"><label>Dein Name</label><input type="text" id="r-name" placeholder="Max Mustermann" autocomplete="name"/></div>
       <div class="fld"><label>E-Mail</label><input type="email" id="r-email" placeholder="mail@example.com" autocomplete="email"/></div>
       <div class="fld"><label>Passwort</label><input type="password" id="r-pw" placeholder="min. 6 Zeichen" autocomplete="new-password" onkeydown="if(event.key==='Enter')doRegister()"/></div>
-      <button class="btn-main" onclick="doRegister()">Registrieren →</button>
+      <button class="btn-main" id="btn-register" onclick="doRegister()">Registrieren →</button>
     </div>
-
-    <!-- Passwort vergessen -->
     <div id="f-forgot" style="display:none">
       <div class="fld"><label>Deine E-Mail</label><input type="email" id="forgot-email" placeholder="mail@example.com" autocomplete="email"/></div>
       <button class="btn-main" onclick="doForgotPw()">Reset-Link senden →</button>
       <div class="auth-link" onclick="showLoginAgain()">← Zurück zum Login</div>
     </div>
-
-    <!-- Passwort ändern (nach Reset-Link) -->
     <div id="f-resetpw" style="display:none">
       <div class="fld"><label>Neues Passwort</label><input type="password" id="new-pw" placeholder="min. 6 Zeichen" autocomplete="new-password"/></div>
       <div class="fld"><label>Passwort bestätigen</label><input type="password" id="new-pw2" placeholder="Wiederholen" autocomplete="new-password" onkeydown="if(event.key==='Enter')doResetPw()"/></div>
       <button class="btn-main" onclick="doResetPw()">Passwort speichern →</button>
     </div>
-
     <div class="msg-box err" id="auth-err"></div>
     <div class="msg-box ok" id="auth-ok"></div>
   </div>
 </div>
 
-<!-- ══ APP ══ -->
 <div id="app">
  <div class="layout">
-  <!-- Sidebar -->
   <div class="sb" id="sidebar">
     <div class="sb-top">
       <div class="sb-head">
@@ -347,16 +288,12 @@ video{width:100%;border-radius:12px;background:#000;}
       <button class="btn-lo" onclick="event.stopPropagation();doLogout()">Logout</button>
     </div>
   </div>
-
-  <!-- Chat Area -->
   <div class="ca" id="ca">
     <div class="empty-ca"><div class="big">💬</div><h2>MarChat</h2><p>Tippe auf ✉️ um einen Chat zu starten.</p></div>
   </div>
  </div>
 </div>
 
-<!-- ══ MODALS ══ -->
-<!-- Neuer Chat -->
 <div class="ov off" id="m-newchat" onclick="if(event.target===this)closeModal('m-newchat')">
   <div class="modal"><h3>💬 Neuen Chat starten</h3>
     <div class="fld"><label>Name oder E-Mail suchen</label><input type="text" id="search-user" placeholder="z.B. Max..." oninput="searchUsers(this.value)" autocomplete="off"/></div>
@@ -365,7 +302,6 @@ video{width:100%;border-radius:12px;background:#000;}
   </div>
 </div>
 
-<!-- Neue Gruppe -->
 <div class="ov off" id="m-newgroup" onclick="if(event.target===this)closeModal('m-newgroup')">
   <div class="modal"><h3>👥 Neue Gruppe erstellen</h3>
     <div class="fld"><label>Gruppenname</label><input type="text" id="grp-name" placeholder="z.B. Familie, Freunde..."/></div>
@@ -376,7 +312,6 @@ video{width:100%;border-radius:12px;background:#000;}
   </div>
 </div>
 
-<!-- Profil -->
 <div class="ov off" id="m-profile" onclick="if(event.target===this)closeModal('m-profile')">
   <div class="modal"><h3>👤 Mein Profil</h3>
     <div class="prof-avatar-wrap">
@@ -402,7 +337,6 @@ video{width:100%;border-radius:12px;background:#000;}
   </div>
 </div>
 
-<!-- Passwort ändern (im Profil) -->
 <div class="ov off" id="m-changepw" onclick="if(event.target===this)closeModal('m-changepw')">
   <div class="modal"><h3>🔑 Passwort ändern</h3>
     <div class="fld"><label>Neues Passwort</label><input type="password" id="chpw-new" placeholder="min. 6 Zeichen" autocomplete="new-password"/></div>
@@ -416,7 +350,6 @@ video{width:100%;border-radius:12px;background:#000;}
   </div>
 </div>
 
-<!-- Alias -->
 <div class="ov off" id="m-alias" onclick="if(event.target===this)closeModal('m-alias')">
   <div class="modal"><h3>✏️ Spitzname setzen</h3>
     <p style="color:var(--muted);font-size:13px;margin-bottom:16px;line-height:1.6">Nur du siehst diesen lokalen Namen.</p>
@@ -429,7 +362,6 @@ video{width:100%;border-radius:12px;background:#000;}
   </div>
 </div>
 
-<!-- ══ ANRUF OVERLAY ══ -->
 <div class="call-overlay off" id="call-overlay">
   <div class="call-av a1" id="call-av-icon">?</div>
   <div class="call-name" id="call-name-txt">—</div>
@@ -446,7 +378,6 @@ video{width:100%;border-radius:12px;background:#000;}
   </div>
 </div>
 
-<!-- ══ EINGEHENDER ANRUF ══ -->
 <div class="incoming-banner off" id="incoming-banner">
   <div class="call-av sm a1" id="inc-av" style="width:44px;height:44px;font-size:15px;flex-shrink:0;">?</div>
   <div class="inc-info">
@@ -459,7 +390,6 @@ video{width:100%;border-radius:12px;background:#000;}
   </div>
 </div>
 
-<!-- ══ INSTALL BANNER ══ -->
 <div class="install-banner off" id="install-banner">
   <div style="font-size:30px;flex-shrink:0;">💬</div>
   <div class="install-info">
@@ -475,20 +405,13 @@ video{width:100%;border-radius:12px;background:#000;}
 <script>
 'use strict';
 
-/* ══ SUPABASE ══ */
 const SUPA_URL='https://sdsyiopaaioczfevdtrf.supabase.co';
 const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNkc3lpb3BhYWlvY3pmZXZkdHJmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc1NDI5MTIsImV4cCI6MjA5MzExODkxMn0.U7zIcserliJm0P34zrfHhniAcxGcDktSPko9CzHAUCo';
 const sb=window.supabase.createClient(SUPA_URL,SUPA_KEY,{
   realtime:{params:{eventsPerSecond:10}},
-  auth:{
-    persistSession:true,
-    autoRefreshToken:true,
-    detectSessionInUrl:true,
-    storage:localStorage
-  }
+  auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,storage:localStorage}
 });
 
-/* ══ STATE ══ */
 let me=null,myProfile=null,activeConv=null,msgSub=null,callSub=null;
 let allConvs=[],currentTab='chats',grpMembers=[];
 let localStream=null,peerConn=null,callTimerInt=null,callSecs=0;
@@ -515,12 +438,7 @@ function openIDB(){
     req.onerror=()=>rej(req.error);
   });
 }
-const idbTx=(store,mode,fn)=>new Promise((res,rej)=>{
-  const tx=idb.transaction(store,mode);
-  const req=fn(tx.objectStore(store));
-  req.onsuccess=()=>res(req.result);
-  req.onerror=()=>rej(req.error);
-});
+const idbTx=(store,mode,fn)=>new Promise((res,rej)=>{const tx=idb.transaction(store,mode);const req=fn(tx.objectStore(store));req.onsuccess=()=>res(req.result);req.onerror=()=>rej(req.error);});
 const idbPut=(s,o)=>idbTx(s,'readwrite',os=>os.put(o));
 const idbDel=(s,k)=>idbTx(s,'readwrite',os=>os.delete(k));
 const idbAll=(s)=>new Promise((res,rej)=>{const tx=idb.transaction(s,'readonly');const req=tx.objectStore(s).getAll();req.onsuccess=()=>res(req.result||[]);req.onerror=()=>rej(req.error);});
@@ -528,33 +446,11 @@ const idbIdx=(s,idx,val)=>new Promise((res,rej)=>{const tx=idb.transaction(s,'re
 
 async function saveMsg(m){
   const eid=m.id||m.msg_id||'';
-  if(eid&&eid.indexOf('tmp_')!==0){
-    const ex=await idbIdx('messages','msg_id',eid);
-    if(ex.length)return;
-  }
-  await idbPut('messages',{
-    msg_id:eid||('tmp_'+Date.now()),
-    conv_id:m.conv_id,
-    sender_id:m.sender_id,
-    sender_name:m.sender_name||'',
-    content:m.content||'',
-    type:m.type||'text',
-    file_url:m.file_url||null,
-    file_name:m.file_name||null,
-    file_size:m.file_size||null,
-    created_at:m.created_at||new Date().toISOString()
-  });
+  if(eid&&eid.indexOf('tmp_')!==0){const ex=await idbIdx('messages','msg_id',eid);if(ex.length)return;}
+  await idbPut('messages',{msg_id:eid||('tmp_'+Date.now()),conv_id:m.conv_id,sender_id:m.sender_id,sender_name:m.sender_name||'',content:m.content||'',type:m.type||'text',file_url:m.file_url||null,file_name:m.file_name||null,file_size:m.file_size||null,created_at:m.created_at||new Date().toISOString()});
 }
 async function saveMeta(c){
-  await idbPut('convmeta',{
-    conv_id:c.id,type:c.type,name:c.name||'',
-    other_id:c._other?.id||null,
-    other_name:c._display_name||'',
-    other_avatar:c._other?.avatar_url||null,
-    last_msg:c.last_msg||'',
-    updated_at:c.updated_at||'',
-    accepted:c.accepted!==false
-  });
+  await idbPut('convmeta',{conv_id:c.id,type:c.type,name:c.name||'',other_id:c._other?.id||null,other_name:c._display_name||'',other_avatar:c._other?.avatar_url||null,last_msg:c.last_msg||'',updated_at:c.updated_at||'',accepted:c.accepted!==false});
 }
 
 /* ══ AUDIO ══ */
@@ -564,64 +460,18 @@ function playPing(){try{const c=getAC(),o=c.createOscillator(),g=c.createGain();
 function startRing(){stopRing();try{const c=getAC();ringGain=c.createGain();ringGain.gain.value=.4;ringGain.connect(c.destination);let t=c.currentTime;function r(){if(!ringGain)return;[0,.2].forEach(d=>{const o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(ringGain);o.frequency.value=440;g.gain.setValueAtTime(0,t+d);g.gain.linearRampToValueAtTime(.5,t+d+.05);g.gain.linearRampToValueAtTime(0,t+d+.18);o.start(t+d);o.stop(t+d+.2);});t+=1.2;ringNode=setTimeout(r,1200);}r();}catch(e){}}
 function stopRing(){clearTimeout(ringNode);ringNode=null;if(ringGain){try{ringGain.disconnect();}catch(e){}ringGain=null;}}
 
-/* ══ BENACHRICHTIGUNGEN ══ */
-async function askNotif(){
-  if(!('Notification'in window))return;
-  if(Notification.permission==='default'){
-    await Notification.requestPermission();
-  }
-}
-function notify(title,body,cb){
-  if(!('Notification'in window)||Notification.permission!=='granted')return;
-  if(document.visibilityState==='visible'&&document.hasFocus())return;
-  try{
-    const n=new Notification(title,{body,icon:'icon-192.png',tag:'cf-msg',renotify:true});
-    if(cb)n.onclick=()=>{window.focus();n.close();cb()};
-  }catch(e){}
-}
-function notifyCall(name){
-  if(!('Notification'in window)||Notification.permission!=='granted')return;
-  try{
-    const n=new Notification('📞 Eingehender Anruf',{body:name+' ruft an',icon:'icon-192.png',tag:'cf-call',renotify:true,requireInteraction:true});
-    n.onclick=()=>{window.focus();n.close();acceptCall()};
-  }catch(e){}
-}
+async function askNotif(){if(!('Notification'in window))return;if(Notification.permission==='default'){await Notification.requestPermission();}}
+function notify(title,body,cb){if(!('Notification'in window)||Notification.permission!=='granted')return;if(document.visibilityState==='visible'&&document.hasFocus())return;try{const n=new Notification(title,{body,icon:'icon-192.png',tag:'cf-msg',renotify:true});if(cb)n.onclick=()=>{window.focus();n.close();cb()};}catch(e){}}
+function notifyCall(name){if(!('Notification'in window)||Notification.permission!=='granted')return;try{const n=new Notification('📞 Eingehender Anruf',{body:name+' ruft an',icon:'icon-192.png',tag:'cf-call',renotify:true,requireInteraction:true});n.onclick=()=>{window.focus();n.close();acceptCall()};}catch(e){}}
 
-/* ══ PWA / SERVICE WORKER ══ */
 function initPWA(){
-  if('serviceWorker'in navigator){
-    navigator.serviceWorker.register('sw.js').then(reg=>{
-      console.log('SW registered:',reg.scope);
-    }).catch(err=>{
-      console.log('SW registration failed:',err);
-    });
-  }
-  window.addEventListener('beforeinstallprompt',e=>{
-    e.preventDefault();
-    deferredInstall=e;
-    if(!localStorage.getItem('cf_nodismiss')){
-      setTimeout(()=>document.getElementById('install-banner').classList.remove('off'),4000);
-    }
-  });
-  window.addEventListener('appinstalled',()=>{
-    document.getElementById('install-banner').classList.add('off');
-    deferredInstall=null;
-  });
+  if('serviceWorker'in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{});}
+  window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstall=e;if(!localStorage.getItem('cf_nodismiss')){setTimeout(()=>document.getElementById('install-banner').classList.remove('off'),4000);}});
+  window.addEventListener('appinstalled',()=>{document.getElementById('install-banner').classList.add('off');deferredInstall=null;});
 }
-function doInstall(){
-  if(!deferredInstall)return;
-  deferredInstall.prompt();
-  deferredInstall.userChoice.then(()=>{
-    deferredInstall=null;
-    document.getElementById('install-banner').classList.add('off');
-  });
-}
-function dismissInstall(){
-  document.getElementById('install-banner').classList.add('off');
-  localStorage.setItem('cf_nodismiss','1');
-}
+function doInstall(){if(!deferredInstall)return;deferredInstall.prompt();deferredInstall.userChoice.then(()=>{deferredInstall=null;document.getElementById('install-banner').classList.add('off');});}
+function dismissInstall(){document.getElementById('install-banner').classList.add('off');localStorage.setItem('cf_nodismiss','1');}
 
-/* ══ UTILS ══ */
 const AC=['a1','a2','a3','a4','a5','a6','a7','a8'];
 function acol(s){let h=0;for(const c of(s||'x'))h=(h*31+c.charCodeAt(0))%AC.length;return AC[h];}
 function ini(n){return(n||'?').split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2)||'?';}
@@ -637,15 +487,12 @@ function closeModal(id){document.getElementById(id).classList.add('off');}
 function loadAliases(){try{Object.assign(aliases,JSON.parse(localStorage.getItem('cf_aliases')||'{}'));}catch(e){}}
 function saveAliases(){localStorage.setItem('cf_aliases',JSON.stringify(aliases));}
 function getDN(c){return aliases[c.id]||(c._display_name||c.name||'Unbekannt');}
-function avHtml(p,cls){
-  if(p&&p.avatar_url)return'<div class="av '+(cls||'')+'" style="background:none"><img src="'+esc(p.avatar_url)+'" alt=""></div>';
-  return'<div class="av '+acol(p&&p.id||'0')+' '+(cls||'')+'">'+ini(p&&p.display_name||'?')+'</div>';
-}
+function avHtml(p,cls){if(p&&p.avatar_url)return'<div class="av '+(cls||'')+'" style="background:none"><img src="'+esc(p.avatar_url)+'" alt=""></div>';return'<div class="av '+acol(p&&p.id||'0')+' '+(cls||'')+'">'+ini(p&&p.display_name||'?')+'</div>';}
 function isMob(){return window.innerWidth<=640;}
 function showChat(){if(!isMob())return;document.getElementById('sidebar').classList.add('hidden');document.getElementById('ca').classList.add('visible');}
 function showSB(){if(!isMob())return;document.getElementById('sidebar').classList.remove('hidden');document.getElementById('ca').classList.remove('visible');}
 
-/* ══ AUTH SCREEN STEUERUNG ══ */
+/* ══ AUTH TABS ══ */
 function switchTab(t){
   document.querySelectorAll('.tabs .tab').forEach((el,i)=>el.classList.toggle('on',i===(t==='login'?0:1)));
   document.getElementById('f-login').style.display=t==='login'?'':'none';
@@ -659,92 +506,91 @@ function showForgotPw(){
   document.getElementById('f-login').style.display='none';
   document.getElementById('f-reg').style.display='none';
   document.getElementById('f-forgot').style.display='block';
-  document.getElementById('f-resetpw').style.display='none';
   document.getElementById('auth-sub').textContent='Passwort zurücksetzen';
   hM('auth-err');hM('auth-ok');
 }
-function showLoginAgain(){
-  switchTab('login');
-}
+function showLoginAgain(){switchTab('login');}
 function showResetForm(){
-  document.getElementById('f-login').style.display='none';
-  document.getElementById('f-reg').style.display='none';
-  document.getElementById('f-forgot').style.display='none';
+  ['f-login','f-reg','f-forgot'].forEach(id=>document.getElementById(id).style.display='none');
   document.getElementById('f-resetpw').style.display='block';
   document.querySelectorAll('.tabs .tab').forEach(el=>el.classList.remove('on'));
   document.getElementById('auth-sub').textContent='Neues Passwort setzen';
   hM('auth-err');hM('auth-ok');
 }
 
-/* ══ LOGIN / REGISTER ══ */
+/* ══ LOGIN ══ */
 async function doLogin(){
+  hM('auth-err');hM('auth-ok');
   const email=document.getElementById('l-email').value.trim();
   const pw=document.getElementById('l-pw').value;
   if(!email||!pw){showErr('auth-err','E-Mail und Passwort eingeben.');return;}
-  const{data,error}=await sb.auth.signInWithPassword({email,password:pw});
-  if(error){showErr('auth-err','❌ '+error.message);return;}
-  await onLogin(data.user);
+  const btn=document.getElementById('btn-login');
+  if(btn){btn.disabled=true;btn.textContent='Anmelden...';}
+  try{
+    const{data,error}=await sb.auth.signInWithPassword({email,password:pw});
+    if(error){showErr('auth-err','❌ '+error.message);return;}
+    if(!data?.user){showErr('auth-err','❌ Kein Benutzer zurückgegeben. Bitte erneut versuchen.');return;}
+    await onLogin(data.user);
+  }catch(e){
+    console.error('Login error:',e);
+    showErr('auth-err','❌ Verbindungsfehler: '+(e?.message||String(e)));
+  }finally{
+    if(btn){btn.disabled=false;btn.textContent='Anmelden →';}
+  }
 }
+
+/* ══ REGISTER ══ */
 async function doRegister(){
+  hM('auth-err');hM('auth-ok');
   const name=document.getElementById('r-name').value.trim();
   const email=document.getElementById('r-email').value.trim();
   const pw=document.getElementById('r-pw').value;
   if(!name||!email||!pw){showErr('auth-err','Alle Felder ausfüllen.');return;}
   if(pw.length<6){showErr('auth-err','Passwort mind. 6 Zeichen.');return;}
-  // redirectTo: nach E-Mail-Bestätigung zurück zur App leiten
-  const redirectTo=window.location.origin+window.location.pathname;
-  const{data,error}=await sb.auth.signUp({
-    email,password:pw,
-    options:{
-      data:{display_name:name},
-      emailRedirectTo:redirectTo
+  const btn=document.getElementById('btn-register');
+  if(btn){btn.disabled=true;btn.textContent='Registrieren...';}
+  try{
+    const redirectTo=window.location.origin+window.location.pathname;
+    const{data,error}=await sb.auth.signUp({email,password:pw,options:{data:{display_name:name},emailRedirectTo:redirectTo}});
+    if(error){showErr('auth-err','❌ '+error.message);return;}
+    if(data.user&&!data.session){showOk('auth-ok','✅ Registriert! Bitte E-Mail bestätigen.');return;}
+    if(data.user){
+      await sb.from('profiles').upsert({id:data.user.id,email,display_name:name});
+      await onLogin(data.user);
     }
-  });
-  if(error){showErr('auth-err','❌ '+error.message);return;}
-  if(data.user&&!data.session){
-    showOk('auth-ok','✅ Registriert! Bitte E-Mail bestätigen – dann wirst du automatisch eingeloggt.');
-    return;
-  }
-  if(data.user){
-    await sb.from('profiles').upsert({id:data.user.id,email,display_name:name});
-    await onLogin(data.user);
+  }catch(e){
+    console.error('Register error:',e);
+    showErr('auth-err','❌ Verbindungsfehler: '+(e?.message||String(e)));
+  }finally{
+    if(btn){btn.disabled=false;btn.textContent='Registrieren →';}
   }
 }
 
-/* ══ PASSWORT VERGESSEN ══ */
 async function doForgotPw(){
   const email=document.getElementById('forgot-email').value.trim();
   if(!email){showErr('auth-err','Bitte E-Mail eingeben.');return;}
-  const redirectTo=window.location.origin+window.location.pathname;
-  const{error}=await sb.auth.resetPasswordForEmail(email,{redirectTo});
-  if(error){showErr('auth-err','❌ '+error.message);return;}
-  showOk('auth-ok','✅ Reset-Link gesendet! Bitte E-Mail prüfen. Nach dem Klick wirst du zurückgeleitet.');
+  try{
+    const{error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:window.location.origin+window.location.pathname});
+    if(error){showErr('auth-err','❌ '+error.message);return;}
+    showOk('auth-ok','✅ Reset-Link gesendet! Bitte E-Mail prüfen.');
+  }catch(e){showErr('auth-err','❌ Verbindungsfehler: '+(e?.message||String(e)));}
 }
 
-/* ══ PASSWORT RESET (nach Redirect vom E-Mail-Link) ══ */
 async function doResetPw(){
   const np=document.getElementById('new-pw').value;
   const np2=document.getElementById('new-pw2').value;
   if(!np||!np2){showErr('auth-err','Beide Felder ausfüllen.');return;}
   if(np!==np2){showErr('auth-err','Passwörter stimmen nicht überein.');return;}
   if(np.length<6){showErr('auth-err','Passwort mind. 6 Zeichen.');return;}
-  const{error}=await sb.auth.updateUser({password:np});
-  if(error){showErr('auth-err','❌ '+error.message);return;}
-  showOk('auth-ok','✅ Passwort erfolgreich geändert! Du wirst eingeloggt...');
-  setTimeout(async()=>{
-    const{data}=await sb.auth.getSession();
-    if(data?.session?.user)await onLogin(data.session.user);
-    else switchTab('login');
-  },1500);
+  try{
+    const{error}=await sb.auth.updateUser({password:np});
+    if(error){showErr('auth-err','❌ '+error.message);return;}
+    showOk('auth-ok','✅ Passwort geändert! Du wirst eingeloggt...');
+    setTimeout(async()=>{const{data}=await sb.auth.getSession();if(data?.session?.user)await onLogin(data.session.user);else switchTab('login');},1500);
+  }catch(e){showErr('auth-err','❌ Verbindungsfehler: '+(e?.message||String(e)));}
 }
 
-/* ══ PASSWORT ÄNDERN (im Profil) ══ */
-function openChangePw(){
-  hM('chpw-err');hM('chpw-ok');
-  document.getElementById('chpw-new').value='';
-  document.getElementById('chpw-new2').value='';
-  openModal('m-changepw');
-}
+function openChangePw(){hM('chpw-err');hM('chpw-ok');document.getElementById('chpw-new').value='';document.getElementById('chpw-new2').value='';openModal('m-changepw');}
 async function doChangePw(){
   hM('chpw-err');hM('chpw-ok');
   const np=document.getElementById('chpw-new').value;
@@ -752,28 +598,36 @@ async function doChangePw(){
   if(!np||!np2){showErr('chpw-err','Beide Felder ausfüllen.');return;}
   if(np!==np2){showErr('chpw-err','Passwörter stimmen nicht überein.');return;}
   if(np.length<6){showErr('chpw-err','Passwort mind. 6 Zeichen.');return;}
-  const{error}=await sb.auth.updateUser({password:np});
-  if(error){showErr('chpw-err','❌ '+error.message);return;}
-  showOk('chpw-ok','✅ Passwort erfolgreich geändert!');
-  setTimeout(()=>closeModal('m-changepw'),2000);
+  try{
+    const{error}=await sb.auth.updateUser({password:np});
+    if(error){showErr('chpw-err','❌ '+error.message);return;}
+    showOk('chpw-ok','✅ Passwort erfolgreich geändert!');
+    setTimeout(()=>closeModal('m-changepw'),2000);
+  }catch(e){showErr('chpw-err','❌ Verbindungsfehler: '+(e?.message||String(e)));}
 }
 
-/* ══ LOGIN CALLBACK ══ */
+/* ══ ON LOGIN ══ */
 async function onLogin(user){
+  if(!user){console.error('onLogin: kein user!');return;}
   me=user;
   loadAliases();
   await askNotif();
-  let{data:prof}=await sb.from('profiles').select('*').eq('id',user.id).single();
-  if(!prof){
-    const name=user.user_metadata?.display_name||user.email.split('@')[0];
-    await sb.from('profiles').upsert({id:user.id,email:user.email,display_name:name});
-    prof={id:user.id,email:user.email,display_name:name};
+  try{
+    let{data:prof}=await sb.from('profiles').select('*').eq('id',user.id).single();
+    if(!prof){
+      const name=user.user_metadata?.display_name||user.email.split('@')[0];
+      await sb.from('profiles').upsert({id:user.id,email:user.email,display_name:name});
+      prof={id:user.id,email:user.email,display_name:name};
+    }
+    myProfile=prof;
+    profileCache[user.id]=prof;
+  }catch(e){
+    console.error('Profile load error:',e);
+    myProfile={id:user.id,email:user.email,display_name:user.email.split('@')[0]};
   }
-  myProfile=prof;
-  profileCache[user.id]=prof;
   document.getElementById('s-auth').classList.add('off');
   document.getElementById('app').style.display='block';
-  document.getElementById('my-name').textContent=prof.display_name||user.email.split('@')[0];
+  document.getElementById('my-name').textContent=myProfile.display_name||user.email.split('@')[0];
   document.getElementById('my-email').textContent=user.email;
   updMyAv();
   await loadConvs();
@@ -781,26 +635,16 @@ async function onLogin(user){
   subscribeNewChats();
 }
 
-/* ══ AUTH STATE LISTENER ══
-   Nur für PASSWORD_RECOVERY (Reset-Link aus E-Mail) und
-   für E-Mail-Bestätigung (wenn noch nicht eingeloggt und kein me).
-   Normaler Login läuft direkt über doLogin() → onLogin().
-══ */
 sb.auth.onAuthStateChange(async(event,session)=>{
   if(event==='PASSWORD_RECOVERY'){
-    // User hat auf Password-Reset-Link in der E-Mail geklickt
     document.getElementById('s-auth').classList.remove('off');
     document.getElementById('app').style.display='none';
     if(session?.user)me=session.user;
     showResetForm();
   } else if(event==='SIGNED_IN'&&session?.user&&!me){
-    // Nur aktiv wenn noch KEIN me gesetzt ist
-    // → bedeutet: Seite wurde neu geladen nach E-Mail-Bestätigung
     const hash=window.location.hash;
     if(hash.includes('type=recovery')||hash.includes('type=signup')){
-      // E-Mail-Bestätigung: direkt einloggen
       await onLogin(session.user);
-      // Hash aus URL entfernen
       history.replaceState(null,'',window.location.pathname);
     }
   } else if(event==='SIGNED_OUT'){
@@ -812,12 +656,10 @@ function updMyAv(){
   const av=document.getElementById('my-av');
   const n=myProfile?.display_name||me.email.split('@')[0];
   if(myProfile?.avatar_url){
-    av.className='av';
-    av.style.cssText='width:34px;height:34px;background:none;border-radius:50%;overflow:hidden;flex-shrink:0;';
+    av.className='av';av.style.cssText='width:34px;height:34px;background:none;border-radius:50%;overflow:hidden;flex-shrink:0;';
     av.innerHTML='<img src="'+esc(myProfile.avatar_url)+'" style="width:34px;height:34px;object-fit:cover;border-radius:50%" alt="">';
   } else {
-    av.className='av '+acol(me.id);
-    av.style.cssText='width:34px;height:34px;font-size:12px;flex-shrink:0;';
+    av.className='av '+acol(me.id);av.style.cssText='width:34px;height:34px;font-size:12px;flex-shrink:0;';
     av.innerHTML=ini(n);
   }
 }
@@ -843,13 +685,8 @@ function openProfile(){
   document.getElementById('prof-bio-inp').value=myProfile?.bio||'';
   document.getElementById('prof-email-inp').value=me?.email||'';
   const av=document.getElementById('prof-av-big');
-  if(myProfile?.avatar_url){
-    av.className='prof-av-big';
-    document.getElementById('prof-av-ini').innerHTML='<img src="'+esc(myProfile.avatar_url)+'" style="width:80px;height:80px;border-radius:50%;object-fit:cover">';
-  } else {
-    av.className='prof-av-big '+acol(me.id);
-    document.getElementById('prof-av-ini').textContent=ini(myProfile?.display_name||'?');
-  }
+  if(myProfile?.avatar_url){av.className='prof-av-big';document.getElementById('prof-av-ini').innerHTML='<img src="'+esc(myProfile.avatar_url)+'" style="width:80px;height:80px;border-radius:50%;object-fit:cover">';}
+  else{av.className='prof-av-big '+acol(me.id);document.getElementById('prof-av-ini').textContent=ini(myProfile?.display_name||'?');}
   openModal('m-profile');
 }
 async function uploadAvatar(input){
@@ -875,138 +712,84 @@ async function saveProfile(){
   const bio=document.getElementById('prof-bio-inp').value.trim();
   const newEmail=document.getElementById('prof-email-inp').value.trim();
   if(!name){showErr('prof-err','Name darf nicht leer sein!');return;}
-  // Name + Bio aktualisieren
-  const{error}=await sb.from('profiles').update({display_name:name,bio}).eq('id',me.id);
-  if(error){showErr('prof-err','Fehler: '+error.message);return;}
-  myProfile.display_name=name;myProfile.bio=bio;profileCache[me.id]=myProfile;
-  document.getElementById('my-name').textContent=name;
-  updMyAv();
-  // E-Mail ändern?
-  if(newEmail&&newEmail!==me.email){
-    const{error:emailErr}=await sb.auth.updateUser({email:newEmail});
-    if(emailErr){showErr('prof-err','Name gespeichert. E-Mail-Fehler: '+emailErr.message);return;}
-    showOk('prof-ok','✅ Name gespeichert! E-Mail-Bestätigung an neue Adresse gesendet.');
-  } else {
-    showOk('prof-ok','✅ Gespeichert!');
-  }
-  setTimeout(()=>closeModal('m-profile'),1500);
+  try{
+    const{error}=await sb.from('profiles').update({display_name:name,bio}).eq('id',me.id);
+    if(error){showErr('prof-err','Fehler: '+error.message);return;}
+    myProfile.display_name=name;myProfile.bio=bio;profileCache[me.id]=myProfile;
+    document.getElementById('my-name').textContent=name;updMyAv();
+    if(newEmail&&newEmail!==me.email){
+      const{error:emailErr}=await sb.auth.updateUser({email:newEmail});
+      if(emailErr){showErr('prof-err','Name gespeichert. E-Mail-Fehler: '+emailErr.message);return;}
+      showOk('prof-ok','✅ Name gespeichert! E-Mail-Bestätigung gesendet.');
+    } else {showOk('prof-ok','✅ Gespeichert!');}
+    setTimeout(()=>closeModal('m-profile'),1500);
+  }catch(e){showErr('prof-err','❌ Fehler: '+(e?.message||String(e)));}
 }
 
 function openAlias(){if(!activeConv||activeConv.type!=='private')return;document.getElementById('alias-inp').value=aliases[activeConv.id]||'';openModal('m-alias');}
-function saveAlias(){
-  const v=document.getElementById('alias-inp').value.trim();
-  if(!activeConv)return;
-  if(v)aliases[activeConv.id]=v;else delete aliases[activeConv.id];
-  saveAliases();closeModal('m-alias');
-  const ct=document.getElementById('conv-title');if(ct)ct.textContent=getDN(activeConv);
-  renderConvs(allConvs);
-}
-function clearAlias(){
-  if(!activeConv)return;
-  delete aliases[activeConv.id];
-  saveAliases();closeModal('m-alias');
-  const ct=document.getElementById('conv-title');if(ct)ct.textContent=getDN(activeConv);
-  renderConvs(allConvs);
-}
+function saveAlias(){const v=document.getElementById('alias-inp').value.trim();if(!activeConv)return;if(v)aliases[activeConv.id]=v;else delete aliases[activeConv.id];saveAliases();closeModal('m-alias');const ct=document.getElementById('conv-title');if(ct)ct.textContent=getDN(activeConv);renderConvs(allConvs);}
+function clearAlias(){if(!activeConv)return;delete aliases[activeConv.id];saveAliases();closeModal('m-alias');const ct=document.getElementById('conv-title');if(ct)ct.textContent=getDN(activeConv);renderConvs(allConvs);}
 
 /* ══ CONVERSATIONS ══ */
 async function loadConvs(){
-  const metas=await idbAll('convmeta');
-  if(metas.length){
-    allConvs=metas.map(m=>({
-      id:m.conv_id,type:m.type,name:m.name,
-      _display_name:m.other_name||m.name,
-      _avatar_id:m.other_id||m.conv_id,
-      _other:m.other_id?{id:m.other_id,display_name:m.other_name,avatar_url:m.other_avatar}:null,
-      last_msg:m.last_msg,updated_at:m.updated_at,accepted:m.accepted!==false
-    }));
-    renderConvs(allConvs);
-  }
-  const{data:parts}=await sb.from('participants').select('conv_id,accepted').eq('user_id',me.id);
-  if(!parts||!parts.length){if(!metas.length)renderConvs([]);return;}
-  const ids=parts.map(p=>p.conv_id);
-  const am={};parts.forEach(p=>am[p.conv_id]=p.accepted!==false);
-  const{data:convs}=await sb.from('conversations').select('*').in('id',ids).order('updated_at',{ascending:false});
-  allConvs=convs||[];
-  for(const c of allConvs){
-    c.accepted=am[c.id]!==false;
-    if(c.type==='private'){
-      const{data:oth}=await sb.from('participants').select('user_id').eq('conv_id',c.id).neq('user_id',me.id);
-      if(oth&&oth.length){const p=await getProf(oth[0].user_id);if(p){c._other=p;c._display_name=p.display_name;c._avatar_id=p.id;}}
-    } else {c._display_name=c.name;c._avatar_id=c.id;}
-    await saveMeta(c);
-  }
-  renderConvs(allConvs);
-  sb.channel('conv-list-rt').on('postgres_changes',{event:'UPDATE',schema:'public',table:'conversations'},p=>{
-    const i=allConvs.findIndex(c=>c.id===p.new.id);
-    if(i>-1){
-      allConvs[i].last_msg=p.new.last_msg||allConvs[i].last_msg;
-      allConvs[i].updated_at=p.new.updated_at;
-      allConvs.sort((a,b)=>new Date(b.updated_at)-new Date(a.updated_at));
+  try{
+    const metas=await idbAll('convmeta');
+    if(metas.length){
+      allConvs=metas.map(m=>({id:m.conv_id,type:m.type,name:m.name,_display_name:m.other_name||m.name,_avatar_id:m.other_id||m.conv_id,_other:m.other_id?{id:m.other_id,display_name:m.other_name,avatar_url:m.other_avatar}:null,last_msg:m.last_msg,updated_at:m.updated_at,accepted:m.accepted!==false}));
       renderConvs(allConvs);
     }
-  }).subscribe();
+    const{data:parts}=await sb.from('participants').select('conv_id,accepted').eq('user_id',me.id);
+    if(!parts||!parts.length){if(!metas.length)renderConvs([]);return;}
+    const ids=parts.map(p=>p.conv_id);
+    const am={};parts.forEach(p=>am[p.conv_id]=p.accepted!==false);
+    const{data:convs}=await sb.from('conversations').select('*').in('id',ids).order('updated_at',{ascending:false});
+    allConvs=convs||[];
+    for(const c of allConvs){
+      c.accepted=am[c.id]!==false;
+      if(c.type==='private'){
+        const{data:oth}=await sb.from('participants').select('user_id').eq('conv_id',c.id).neq('user_id',me.id);
+        if(oth&&oth.length){const p=await getProf(oth[0].user_id);if(p){c._other=p;c._display_name=p.display_name;c._avatar_id=p.id;}}
+      } else {c._display_name=c.name;c._avatar_id=c.id;}
+      await saveMeta(c);
+    }
+    renderConvs(allConvs);
+    sb.channel('conv-list-rt').on('postgres_changes',{event:'UPDATE',schema:'public',table:'conversations'},p=>{
+      const i=allConvs.findIndex(c=>c.id===p.new.id);
+      if(i>-1){allConvs[i].last_msg=p.new.last_msg||allConvs[i].last_msg;allConvs[i].updated_at=p.new.updated_at;allConvs.sort((a,b)=>new Date(b.updated_at)-new Date(a.updated_at));renderConvs(allConvs);}
+    }).subscribe();
+  }catch(e){console.error('loadConvs error:',e);renderConvs([]);}
 }
-function subscribeNewChats(){
-  sb.channel('new-chats-'+me.id)
-    .on('broadcast',{event:'chat-request'},async()=>{await loadConvs();})
-    .subscribe();
-}
+function subscribeNewChats(){sb.channel('new-chats-'+me.id).on('broadcast',{event:'chat-request'},async()=>{await loadConvs();}).subscribe();}
 
 function renderConvs(convs){
   const el=document.getElementById('chat-list');
   const f=convs.filter(c=>currentTab==='chats'?c.type==='private':c.type==='group');
-  if(!f.length){
-    el.innerHTML='<div class="search-empty">'+(currentTab==='chats'?'Keine Chats.<br>Tippe auf ✉️ zum Starten.':'Keine Gruppen.<br>Erstelle eine mit 👥')+'</div>';
-    return;
-  }
+  if(!f.length){el.innerHTML='<div class="search-empty">'+(currentTab==='chats'?'Keine Chats.<br>Tippe auf ✉️ zum Starten.':'Keine Gruppen.<br>Erstelle eine mit 👥')+'</div>';return;}
   el.innerHTML=f.map(c=>{
     const on=activeConv?.id===c.id?' on':'';
     const avEl=c.type==='private'&&c._other?avHtml(c._other,''):('<div class="av '+acol(c._avatar_id||c.id)+'">'+ini(getDN(c))+'</div>');
     const badge=c.accepted===false?'<span class="req-badge">Anfrage</span>':'';
-    return'<div class="ci'+on+'" onclick="openConvById(\''+c.id+'\')">'+avEl+
-      '<div class="ci-info"><div class="ci-name">'+esc(getDN(c))+badge+'</div>'+
-      '<div class="ci-prev">'+(c.accepted===false?'Chat-Anfrage erhalten':(c.last_msg?esc(c.last_msg).slice(0,40):'Noch keine Nachrichten'))+'</div></div>'+
-      '<div class="ci-time">'+(c.updated_at?fmtD(c.updated_at):'')+'</div>'+
-      '<div class="ci-del" onclick="event.stopPropagation();delConv(\''+c.id+'\')">🗑️</div></div>';
+    return'<div class="ci'+on+'" onclick="openConvById(\''+c.id+'\')">'+avEl+'<div class="ci-info"><div class="ci-name">'+esc(getDN(c))+badge+'</div><div class="ci-prev">'+(c.accepted===false?'Chat-Anfrage erhalten':(c.last_msg?esc(c.last_msg).slice(0,40):'Noch keine Nachrichten'))+'</div></div><div class="ci-time">'+(c.updated_at?fmtD(c.updated_at):'')+'</div><div class="ci-del" onclick="event.stopPropagation();delConv(\''+c.id+'\')">🗑️</div></div>';
   }).join('');
 }
 
 function delConv(id){
-  if(!confirm('Chat lokal entfernen? Die Nachrichten bleiben für andere erhalten.'))return;
+  if(!confirm('Chat lokal entfernen?'))return;
   allConvs=allConvs.filter(c=>c.id!==id);
   idbDel('convmeta',id).catch(()=>{});
-  idbIdx('messages','conv_id',id).then(msgs=>{
-    msgs.forEach(m=>idbDel('messages',m.local_id).catch(()=>{}));
-  });
-  if(activeConv?.id===id){
-    activeConv=null;
-    document.getElementById('ca').innerHTML='<div class="empty-ca"><div class="big">💬</div><h2>MarChat</h2><p>Tippe auf ✉️ um einen Chat zu starten.</p></div>';
-    showSB();
-  }
+  idbIdx('messages','conv_id',id).then(msgs=>{msgs.forEach(m=>idbDel('messages',m.local_id).catch(()=>{}));});
+  if(activeConv?.id===id){activeConv=null;document.getElementById('ca').innerHTML='<div class="empty-ca"><div class="big">💬</div><h2>MarChat</h2><p>Tippe auf ✉️ um einen Chat zu starten.</p></div>';showSB();}
   renderConvs(allConvs);
   sb.from('participants').delete().eq('conv_id',id).eq('user_id',me.id).catch(()=>{});
 }
-
-function sbTab(t){
-  currentTab=t;
-  document.querySelectorAll('.sb-tab').forEach((el,i)=>el.classList.toggle('on',i===(t==='chats'?0:1)));
-  renderConvs(allConvs);
-}
-function filterChats(q){
-  renderConvs(allConvs.filter(c=>getDN(c).toLowerCase().includes(q.toLowerCase())));
-}
-function openConvById(id){
-  const c=allConvs.find(x=>x.id===id);
-  if(c)openConv(c);
-}
+function sbTab(t){currentTab=t;document.querySelectorAll('.sb-tab').forEach((el,i)=>el.classList.toggle('on',i===(t==='chats'?0:1)));renderConvs(allConvs);}
+function filterChats(q){renderConvs(allConvs.filter(c=>getDN(c).toLowerCase().includes(q.toLowerCase())));}
+function openConvById(id){const c=allConvs.find(x=>x.id===id);if(c)openConv(c);}
 
 async function openConv(conv){
-  exitSel();
-  activeConv=conv;
+  exitSel();activeConv=conv;
   if(msgSub){msgSub.unsubscribe();msgSub=null;}
-  renderConvs(allConvs);
-  showChat();
+  renderConvs(allConvs);showChat();
   const dn=getDN(conv),isGrp=conv.type==='group';
   const headAv=conv._other&&conv._other.avatar_url
     ?'<div style="width:38px;height:38px;border-radius:50%;overflow:hidden;flex-shrink:0"><img src="'+esc(conv._other.avatar_url)+'" style="width:38px;height:38px;object-fit:cover"></div>'
@@ -1016,22 +799,11 @@ async function openConv(conv){
   document.getElementById('ca').innerHTML=
     '<div class="ca-head"><div class="back-btn" onclick="showSB()">←</div>'+headAv+
     '<div style="min-width:0"><div class="ct" id="conv-title">'+esc(dn)+'</div><div class="cs" id="ca-sub">'+(isGrp?'Gruppenchat':'Privater Chat')+'</div></div>'+
-    '<div class="ca-actions">'+
-      (!isGrp?'<div class="ib" onclick="startCall(\'audio\')" title="Audioanruf">📞</div>':'')+
-      (!isGrp?'<div class="ib" onclick="startCall(\'video\')" title="Videoanruf">📹</div>':'')+
-      '<div class="ib" onclick="toggleSel()" title="Auswählen">☑️</div>'+
-      (!isGrp?'<div class="ib" onclick="openAlias()" title="Spitzname">✏️</div>':'')+
-    '</div></div>'+
-    '<div class="select-bar" id="select-bar">'+
-      '<span class="select-count" id="sel-count">0 ausgewählt</span>'+
-      '<button class="select-all-btn" onclick="selectAll()">Alle</button>'+
-      '<button class="select-cancel" onclick="exitSel()">Abbrechen</button>'+
-      '<button class="select-del" onclick="delSel()">🗑️ Löschen</button>'+
-    '</div>'+
+    '<div class="ca-actions">'+(!isGrp?'<div class="ib" onclick="startCall(\'audio\')">📞</div>':'')+(!isGrp?'<div class="ib" onclick="startCall(\'video\')">📹</div>':'')+
+    '<div class="ib" onclick="toggleSel()">☑️</div>'+(!isGrp?'<div class="ib" onclick="openAlias()">✏️</div>':'')+'</div></div>'+
+    '<div class="select-bar" id="select-bar"><span class="select-count" id="sel-count">0 ausgewählt</span><button class="select-all-btn" onclick="selectAll()">Alle</button><button class="select-cancel" onclick="exitSel()">Abbrechen</button><button class="select-del" onclick="delSel()">🗑️ Löschen</button></div>'+
     '<div class="msgs" id="msgs"></div>'+reqBanner+inpBar;
-  await loadMsgs(conv.id);
-  subMsgs(conv.id);
-  scrollB();
+  await loadMsgs(conv.id);subMsgs(conv.id);scrollB();
   const inp=document.getElementById('msg-inp');if(inp)inp.focus();
 }
 
@@ -1041,26 +813,18 @@ async function acceptReq(){
   activeConv.accepted=true;
   const i=allConvs.findIndex(c=>c.id===activeConv.id);
   if(i>-1){allConvs[i].accepted=true;await saveMeta(allConvs[i]);}
-  renderConvs(allConvs);
-  openConv(activeConv);
+  renderConvs(allConvs);openConv(activeConv);
 }
 function declineReq(){if(!activeConv)return;delConv(activeConv.id);}
 
 /* ══ NACHRICHTEN ══ */
 async function loadMsgs(cid){
   const local=await idbIdx('messages','conv_id',cid);
-  if(local.length){
-    local.sort((a,b)=>new Date(a.created_at)-new Date(b.created_at));
-    renderMsgs(local);scrollB();
-  }
+  if(local.length){local.sort((a,b)=>new Date(a.created_at)-new Date(b.created_at));renderMsgs(local);scrollB();}
   const{data}=await sb.from('messages').select('*').eq('conv_id',cid).order('created_at',{ascending:true}).limit(500);
   if(data&&data.length){
     const known=new Set(local.map(m=>m.msg_id));
-    for(const m of data){
-      if(!known.has(m.id)){
-        await saveMsg({...m,msg_id:m.id});
-      }
-    }
+    for(const m of data){if(!known.has(m.id)){await saveMsg({...m,msg_id:m.id});}}
     const all=await idbIdx('messages','conv_id',cid);
     all.sort((a,b)=>new Date(a.created_at)-new Date(b.created_at));
     renderMsgs(all);scrollB();
@@ -1071,21 +835,13 @@ async function loadMsgs(cid){
 
 function bubHtml(m){
   const mine=me&&m.sender_id===me.id,col=acol(m.sender_id||'0'),prof=profileCache[m.sender_id];
-  const av=prof&&prof.avatar_url
-    ?'<div class="msg-av" style="background:none"><img src="'+esc(prof.avatar_url)+'" alt=""></div>'
-    :'<div class="msg-av '+col+'">'+ini(m.sender_name||'?')+'</div>';
+  const av=prof&&prof.avatar_url?'<div class="msg-av" style="background:none"><img src="'+esc(prof.avatar_url)+'" alt=""></div>':'<div class="msg-av '+col+'">'+ini(m.sender_name||'?')+'</div>';
   let c='';
   if(m.type==='image')c='<img class="msg-img" src="'+esc(m.file_url)+'" onclick="window.open(\''+esc(m.file_url)+'\',\'_blank\')" alt="Bild">';
   else if(m.type==='file')c='<a class="file-msg" href="'+esc(m.file_url)+'" target="_blank" rel="noopener"><div class="file-icon">📄</div><div class="file-info"><div class="file-name">'+esc(m.file_name||'Datei')+'</div><div class="file-size">'+esc(m.file_size||'')+'</div></div><span style="color:var(--muted);font-size:16px">⬇</span></a>';
   else c='<div class="bub">'+esc(m.content||'')+'</div>';
-  // lid: String-Repräsentation des local_id-Schlüssels
   const lid=String(m.local_id||m.msg_id||'');
-  return`<div class="msg-wrap ${mine?'me':'them'}">
-    ${!mine&&activeConv?.type==='group'?'<div class="msg-sender">'+esc(m.sender_name||'?')+'</div>':''}
-    <div class="msg ${mine?'me':'them'}" data-lid="${esc(lid)}" onclick="onMsgClick(this,'${esc(lid)}')">
-      <div class="msg-check">✓</div>${!mine?av:''}
-      <div>${c}<div class="msg-time">${fmtT(m.created_at)}</div></div>
-    </div></div>`;
+  return`<div class="msg-wrap ${mine?'me':'them'}">${!mine&&activeConv?.type==='group'?'<div class="msg-sender">'+esc(m.sender_name||'?')+'</div>':''}<div class="msg ${mine?'me':'them'}" data-lid="${esc(lid)}" onclick="onMsgClick(this,'${esc(lid)}')"><div class="msg-check">✓</div>${!mine?av:''}<div>${c}<div class="msg-time">${fmtT(m.created_at)}</div></div></div></div>`;
 }
 
 function renderMsgs(msgs){
@@ -1095,7 +851,6 @@ function renderMsgs(msgs){
   msgs.forEach(m=>{const d=fmtD(m.created_at);if(d!==ld){ld=d;h+='<div class="date-sep"><span>'+d+'</span></div>';}h+=bubHtml(m);});
   w.innerHTML=h;
 }
-
 function appendMsg(m){
   const w=document.getElementById('msgs');if(!w)return;
   const e=w.querySelector('.empty-msgs');if(e)e.remove();
@@ -1105,32 +860,19 @@ function appendMsg(m){
 
 /* ══ REALTIME ══ */
 function subMsgs(cid){
-  const channelName='room-'+cid+'-'+Date.now();
-  msgSub=sb.channel(channelName)
+  msgSub=sb.channel('room-'+cid+'-'+Date.now())
     .on('postgres_changes',{event:'INSERT',schema:'public',table:'messages',filter:'conv_id=eq.'+cid},async p=>{
       if(me&&p.new.sender_id===me.id)return;
       const exists=await idbIdx('messages','msg_id',p.new.id);
       if(!exists.length){
         await saveMsg({...p.new,msg_id:p.new.id});
-        const prof=await getProf(p.new.sender_id);
-        if(prof)profileCache[prof.id]=prof;
-        appendMsg({...p.new,msg_id:p.new.id});
-        scrollB();playPing();
-        notify(
-          (p.new.sender_name||'Jemand')+' schreibt',
-          p.new.content||'📎',
-          ()=>{const c=allConvs.find(x=>x.id===p.new.conv_id);if(c)openConv(c);}
-        );
+        const prof=await getProf(p.new.sender_id);if(prof)profileCache[prof.id]=prof;
+        appendMsg({...p.new,msg_id:p.new.id});scrollB();playPing();
+        notify((p.new.sender_name||'Jemand')+' schreibt',p.new.content||'📎',()=>{const c=allConvs.find(x=>x.id===p.new.conv_id);if(c)openConv(c);});
       }
       const i=allConvs.findIndex(c=>c.id===p.new.conv_id);
-      if(i>-1){
-        allConvs[i].last_msg=p.new.content||'📎';
-        allConvs[i].updated_at=p.new.created_at;
-        allConvs.sort((a,b)=>new Date(b.updated_at)-new Date(a.updated_at));
-        renderConvs(allConvs);
-      }
-    })
-    .subscribe();
+      if(i>-1){allConvs[i].last_msg=p.new.content||'📎';allConvs[i].updated_at=p.new.created_at;allConvs.sort((a,b)=>new Date(b.updated_at)-new Date(a.updated_at));renderConvs(allConvs);}
+    }).subscribe();
 }
 
 async function sendMsg(){
@@ -1140,28 +882,16 @@ async function sendMsg(){
   const sname=myProfile?.display_name||me.email.split('@')[0];
   const tmpId='tmp_'+Date.now();
   const tmpObj={msg_id:tmpId,conv_id:activeConv.id,sender_id:me.id,sender_name:sname,content,type:'text',created_at:new Date().toISOString()};
-  await saveMsg(tmpObj);
-  appendMsg(tmpObj);scrollB();
-  const{data:ins,error}=await sb.from('messages').insert({
-    conv_id:activeConv.id,sender_id:me.id,sender_name:sname,content,type:'text'
-  }).select().single();
-  if(error){console.error('Send error:',error);return;}
-  if(ins){
-    const st=await idbIdx('messages','msg_id',tmpId);
-    if(st.length){
-      // tmp ersetzen durch echte ID
-      await idbPut('messages',{...st[0],msg_id:ins.id});
-    }
-  }
-  await sb.from('conversations').update({last_msg:content,updated_at:new Date().toISOString()}).eq('id',activeConv.id).catch(()=>{});
-  const i=allConvs.findIndex(c=>c.id===activeConv.id);
-  if(i>-1){
-    allConvs[i].last_msg=content;
-    allConvs[i].updated_at=new Date().toISOString();
-    allConvs.sort((a,b)=>new Date(b.updated_at)-new Date(a.updated_at));
-    saveMeta(allConvs[i]);
-  }
-  renderConvs(allConvs);
+  await saveMsg(tmpObj);appendMsg(tmpObj);scrollB();
+  try{
+    const{data:ins,error}=await sb.from('messages').insert({conv_id:activeConv.id,sender_id:me.id,sender_name:sname,content,type:'text'}).select().single();
+    if(error){console.error('Send error:',error);return;}
+    if(ins){const st=await idbIdx('messages','msg_id',tmpId);if(st.length)await idbPut('messages',{...st[0],msg_id:ins.id});}
+    await sb.from('conversations').update({last_msg:content,updated_at:new Date().toISOString()}).eq('id',activeConv.id).catch(()=>{});
+    const i=allConvs.findIndex(c=>c.id===activeConv.id);
+    if(i>-1){allConvs[i].last_msg=content;allConvs[i].updated_at=new Date().toISOString();allConvs.sort((a,b)=>new Date(b.updated_at)-new Date(a.updated_at));saveMeta(allConvs[i]);}
+    renderConvs(allConvs);
+  }catch(e){console.error('sendMsg error:',e);}
 }
 
 function hKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();}}
@@ -1184,106 +914,33 @@ async function sendFile(input){
   await sb.from('conversations').update({last_msg:md.content,updated_at:new Date().toISOString()}).eq('id',activeConv.id).catch(()=>{});
 }
 
-/* ══ SELECT MODE (mit "Alle auswählen") ══ */
+/* ══ SELECT MODE ══ */
 function toggleSel(){selectMode=!selectMode;selectMode?enterSel():exitSel();}
-function enterSel(){
-  selectMode=true;
-  selectedMsgIds.clear();
-  document.getElementById('msgs')?.classList.add('select-mode');
-  document.getElementById('select-bar')?.classList.add('on');
-  updSelCnt();
-}
-function exitSel(){
-  selectMode=false;
-  selectedMsgIds.clear();
-  document.getElementById('msgs')?.classList.remove('select-mode');
-  document.getElementById('select-bar')?.classList.remove('on');
-  document.querySelectorAll('.msg.selected').forEach(el=>el.classList.remove('selected'));
-}
-
-function selectAll(){
-  // Alle Nachrichten im aktuellen Chat auswählen
-  const allMsgs=document.querySelectorAll('#msgs .msg');
-  const allSelected=allMsgs.length>0&&selectedMsgIds.size===allMsgs.length;
-  if(allSelected){
-    // Alle abwählen
-    allMsgs.forEach(el=>el.classList.remove('selected'));
-    selectedMsgIds.clear();
-  } else {
-    // Alle auswählen
-    allMsgs.forEach(el=>{
-      const lid=el.getAttribute('data-lid');
-      if(lid){
-        selectedMsgIds.add(lid);
-        el.classList.add('selected');
-      }
-    });
-  }
-  updSelCnt();
-}
-
-function onMsgClick(el,lid){
-  if(!selectMode)return;
-  if(selectedMsgIds.has(lid)){
-    selectedMsgIds.delete(lid);
-    el.classList.remove('selected');
-  } else {
-    selectedMsgIds.add(lid);
-    el.classList.add('selected');
-  }
-  updSelCnt();
-}
-function updSelCnt(){
-  const el=document.getElementById('sel-count');
-  if(el)el.textContent=selectedMsgIds.size+' ausgewählt';
-}
-
+function enterSel(){selectMode=true;selectedMsgIds.clear();document.getElementById('msgs')?.classList.add('select-mode');document.getElementById('select-bar')?.classList.add('on');updSelCnt();}
+function exitSel(){selectMode=false;selectedMsgIds.clear();document.getElementById('msgs')?.classList.remove('select-mode');document.getElementById('select-bar')?.classList.remove('on');document.querySelectorAll('.msg.selected').forEach(el=>el.classList.remove('selected'));}
+function selectAll(){const allMsgs=document.querySelectorAll('#msgs .msg');const allSel=allMsgs.length>0&&selectedMsgIds.size===allMsgs.length;if(allSel){allMsgs.forEach(el=>el.classList.remove('selected'));selectedMsgIds.clear();}else{allMsgs.forEach(el=>{const lid=el.getAttribute('data-lid');if(lid){selectedMsgIds.add(lid);el.classList.add('selected');}});}updSelCnt();}
+function onMsgClick(el,lid){if(!selectMode)return;if(selectedMsgIds.has(lid)){selectedMsgIds.delete(lid);el.classList.remove('selected');}else{selectedMsgIds.add(lid);el.classList.add('selected');}updSelCnt();}
+function updSelCnt(){const el=document.getElementById('sel-count');if(el)el.textContent=selectedMsgIds.size+' ausgewählt';}
 async function delSel(){
   if(!selectedMsgIds.size){alert('Keine Nachrichten ausgewählt.');return;}
   if(!confirm(selectedMsgIds.size+' Nachricht(en) lokal löschen?'))return;
   const all=await idbIdx('messages','conv_id',activeConv.id);
   for(const lid of selectedMsgIds){
-    // lid kann local_id (Zahl als String) oder msg_id (UUID) sein
     const m=all.find(x=>String(x.local_id)===lid||x.msg_id===lid);
-    if(m){
-      await idbDel('messages',m.local_id);
-      // Auch DOM-Element entfernen
-      const domEl=document.querySelector('#msgs .msg[data-lid="'+CSS.escape(lid)+'"]');
-      if(domEl){
-        const wrap=domEl.closest('.msg-wrap');
-        if(wrap)wrap.remove();
-        else domEl.remove();
-      }
-    }
+    if(m){await idbDel('messages',m.local_id);const domEl=document.querySelector('#msgs .msg[data-lid="'+CSS.escape(lid)+'"]');if(domEl){const wrap=domEl.closest('.msg-wrap');if(wrap)wrap.remove();else domEl.remove();}}
   }
-  // Nachfolgende date-seps ohne Nachrichten entfernen
-  cleanupDateSeps();
-  exitSel();
-  // Zähler aktualisieren
+  cleanupDateSeps();exitSel();
   const cnt=(await idbIdx('messages','conv_id',activeConv.id)).length;
   const s=document.getElementById('ca-sub');if(s)s.textContent=cnt+' Nachrichten';
 }
-
 function cleanupDateSeps(){
-  // Entferne date-sep Elemente die keine Nachrichten danach haben
   const w=document.getElementById('msgs');if(!w)return;
-  const seps=w.querySelectorAll('.date-sep');
-  seps.forEach(sep=>{
-    let next=sep.nextElementSibling;
-    while(next&&next.classList.contains('date-sep'))next=next.nextElementSibling;
-    if(!next||!next.classList.contains('msg-wrap'))sep.remove();
-  });
-  if(!w.querySelector('.msg-wrap')){
-    w.innerHTML='<div class="empty-msgs"><div style="font-size:40px;opacity:.3;margin-bottom:8px">👋</div><p>Sag Hallo!</p></div>';
-  }
+  w.querySelectorAll('.date-sep').forEach(sep=>{let next=sep.nextElementSibling;while(next&&next.classList.contains('date-sep'))next=next.nextElementSibling;if(!next||!next.classList.contains('msg-wrap'))sep.remove();});
+  if(!w.querySelector('.msg-wrap'))w.innerHTML='<div class="empty-msgs"><div style="font-size:40px;opacity:.3;margin-bottom:8px">👋</div><p>Sag Hallo!</p></div>';
 }
 
 /* ══ NEUER CHAT / GRUPPE ══ */
-function openNewChat(){
-  document.getElementById('search-user').value='';
-  document.getElementById('user-results').innerHTML='<div class="search-empty">Tippe einen Namen ein...</div>';
-  openModal('m-newchat');
-}
+function openNewChat(){document.getElementById('search-user').value='';document.getElementById('user-results').innerHTML='<div class="search-empty">Tippe einen Namen ein...</div>';openModal('m-newchat');}
 let stimer=null;
 function searchUsers(q){
   clearTimeout(stimer);const el=document.getElementById('user-results');
@@ -1305,14 +962,7 @@ async function startPM(otherId,otherName){
     const{data:othP}=await sb.from('participants').select('conv_id').eq('user_id',otherId).in('conv_id',myP.map(p=>p.conv_id));
     if(othP&&othP.length){
       const{data:ex}=await sb.from('conversations').select('*').in('id',othP.map(p=>p.conv_id)).eq('type','private').maybeSingle();
-      if(ex){
-        const p=await getProf(otherId);
-        ex._other=p;ex._display_name=p?.display_name||otherName;ex._avatar_id=otherId;ex.accepted=true;
-        if(!allConvs.find(c=>c.id===ex.id))allConvs.unshift(ex);
-        currentTab='chats';
-        document.querySelectorAll('.sb-tab').forEach((el,i)=>el.classList.toggle('on',i===0));
-        renderConvs(allConvs);openConv(ex);return;
-      }
+      if(ex){const p=await getProf(otherId);ex._other=p;ex._display_name=p?.display_name||otherName;ex._avatar_id=otherId;ex.accepted=true;if(!allConvs.find(c=>c.id===ex.id))allConvs.unshift(ex);currentTab='chats';document.querySelectorAll('.sb-tab').forEach((el,i)=>el.classList.toggle('on',i===0));renderConvs(allConvs);openConv(ex);return;}
     }
   }
   const{data:conv,error}=await sb.from('conversations').insert({type:'private',updated_at:new Date().toISOString()}).select().single();
@@ -1320,26 +970,15 @@ async function startPM(otherId,otherName){
   await sb.from('participants').insert([{conv_id:conv.id,user_id:me.id,accepted:true},{conv_id:conv.id,user_id:otherId,accepted:false}]);
   const p=await getProf(otherId);
   conv._other=p;conv._display_name=p?.display_name||otherName;conv._avatar_id=otherId;conv.accepted=true;
-  allConvs.unshift(conv);
-  currentTab='chats';
+  allConvs.unshift(conv);currentTab='chats';
   document.querySelectorAll('.sb-tab').forEach((el,i)=>el.classList.toggle('on',i===0));
   renderConvs(allConvs);openConv(conv);await saveMeta(conv);
   sb.channel('new-chats-'+otherId).send({type:'broadcast',event:'chat-request',payload:{from_id:me.id,from_name:myProfile?.display_name||me.email}}).catch(()=>{});
 }
 
-async function getProf(uid){
-  if(profileCache[uid])return profileCache[uid];
-  const{data}=await sb.from('profiles').select('*').eq('id',uid).single();
-  if(data)profileCache[uid]=data;
-  return data;
-}
+async function getProf(uid){if(profileCache[uid])return profileCache[uid];const{data}=await sb.from('profiles').select('*').eq('id',uid).single();if(data)profileCache[uid]=data;return data;}
 
-function openNewGroup(){
-  grpMembers=[];
-  ['grp-name','grp-search'].forEach(id=>document.getElementById(id).value='');
-  ['grp-results','grp-member-chips'].forEach(id=>document.getElementById(id).innerHTML='');
-  openModal('m-newgroup');
-}
+function openNewGroup(){grpMembers=[];['grp-name','grp-search'].forEach(id=>document.getElementById(id).value='');['grp-results','grp-member-chips'].forEach(id=>document.getElementById(id).innerHTML='');openModal('m-newgroup');}
 let gtimer=null;
 function searchForGroup(q){
   clearTimeout(gtimer);const el=document.getElementById('grp-results');
@@ -1353,34 +992,20 @@ function searchForGroup(q){
     el.innerHTML=hits.map(u=>'<div class="user-result" onclick="addToGrp(\''+u.id+'\',\''+esc(u.display_name||u.email)+'\',\''+esc(u.email)+'\')">'+avHtml(u,'sm')+'<div><div class="ur-name">'+esc(u.display_name||'Unbekannt')+'</div><div class="ur-email">'+esc(u.email)+'</div></div><button class="ur-btn">+</button></div>').join('');
   },300);
 }
-function addToGrp(id,name,email){
-  if(grpMembers.find(m=>m.id===id))return;
-  grpMembers.push({id,name,email});
-  document.getElementById('grp-search').value='';
-  document.getElementById('grp-results').innerHTML='';
-  renderChips();
-}
+function addToGrp(id,name,email){if(grpMembers.find(m=>m.id===id))return;grpMembers.push({id,name,email});document.getElementById('grp-search').value='';document.getElementById('grp-results').innerHTML='';renderChips();}
 function rmFromGrp(id){grpMembers=grpMembers.filter(m=>m.id!==id);renderChips();}
-function renderChips(){
-  document.getElementById('grp-member-chips').innerHTML=grpMembers.map(m=>'<span class="member-chip"><div class="av sm '+acol(m.id)+'" style="width:20px;height:20px;font-size:9px">'+ini(m.name)+'</div>'+esc(m.name)+'<button onclick="rmFromGrp(\''+m.id+'\')">×</button></span>').join('');
-}
+function renderChips(){document.getElementById('grp-member-chips').innerHTML=grpMembers.map(m=>'<span class="member-chip"><div class="av sm '+acol(m.id)+'" style="width:20px;height:20px;font-size:9px">'+ini(m.name)+'</div>'+esc(m.name)+'<button onclick="rmFromGrp(\''+m.id+'\')">×</button></span>').join('');}
 async function createGroup(){
   const name=document.getElementById('grp-name').value.trim();
   if(!name){alert('Bitte Gruppenname eingeben!');return;}
   if(!grpMembers.length){alert('Bitte mind. eine Person hinzufügen!');return;}
   const{data:conv,error}=await sb.from('conversations').insert({type:'group',name,updated_at:new Date().toISOString()}).select().single();
   if(error){alert('Fehler: '+error.message);return;}
-  await sb.from('participants').insert([
-    {conv_id:conv.id,user_id:me.id,accepted:true},
-    ...grpMembers.map(m=>({conv_id:conv.id,user_id:m.id,accepted:true}))
-  ]);
-  conv._display_name=name;conv._avatar_id=conv.id;conv.accepted=true;
-  allConvs.unshift(conv);
-  closeModal('m-newgroup');
-  currentTab='groups';
+  await sb.from('participants').insert([{conv_id:conv.id,user_id:me.id,accepted:true},...grpMembers.map(m=>({conv_id:conv.id,user_id:m.id,accepted:true}))]);
+  conv._display_name=name;conv._avatar_id=conv.id;conv.accepted=true;allConvs.unshift(conv);
+  closeModal('m-newgroup');currentTab='groups';
   document.querySelectorAll('.sb-tab').forEach((el,i)=>el.classList.toggle('on',i===1));
-  renderConvs(allConvs);
-  openConv(conv);
+  renderConvs(allConvs);openConv(conv);
 }
 
 /* ══ WEBRTC ══ */
@@ -1434,10 +1059,7 @@ async function acceptCall(){
   sb.channel('calls-'+data.from_id).send({type:'broadcast',event:'call-answer',payload:{sdp:ans}});
   startTimer();incomingCallData=null;
 }
-function declineCall(){
-  stopRing();document.getElementById('incoming-banner').classList.add('off');
-  if(incomingCallData){sb.channel('calls-'+incomingCallData.from_id).send({type:'broadcast',event:'call-end',payload:{}}).catch(()=>{});incomingCallData=null;}
-}
+function declineCall(){stopRing();document.getElementById('incoming-banner').classList.add('off');if(incomingCallData){sb.channel('calls-'+incomingCallData.from_id).send({type:'broadcast',event:'call-end',payload:{}}).catch(()=>{});incomingCallData=null;}}
 function endCall(fromRemote){
   stopRing();
   if(!fromRemote&&activeConv?._other)sb.channel('calls-'+activeConv._other.id).send({type:'broadcast',event:'call-end',payload:{}}).catch(()=>{});
@@ -1460,46 +1082,24 @@ function hideCallOv(){
   const lv=document.getElementById('local-vid');if(lv)lv.srcObject=null;
 }
 function startTimer(){
-  callSecs=0;const el=document.getElementById('call-timer');
-  el.style.display='block';
-  callTimerInt=setInterval(()=>{
-    callSecs++;
-    el.textContent=String(Math.floor(callSecs/60)).padStart(2,'0')+':'+String(callSecs%60).padStart(2,'0');
-  },1000);
+  callSecs=0;const el=document.getElementById('call-timer');el.style.display='block';
+  callTimerInt=setInterval(()=>{callSecs++;el.textContent=String(Math.floor(callSecs/60)).padStart(2,'0')+':'+String(callSecs%60).padStart(2,'0');},1000);
 }
 let muted=false;
-function toggleMute(){
-  muted=!muted;
-  if(localStream)localStream.getAudioTracks().forEach(t=>t.enabled=!muted);
-  document.getElementById('btn-mute').textContent=muted?'🔇':'🎙️';
-  document.getElementById('btn-mute').style.background=muted?'#ff5c5c':'var(--s3)';
-}
-function toggleSpeaker(){
-  const b=document.getElementById('btn-spk');
-  b._on=!b._on;
-  b.style.background=b._on?'var(--accent)':'var(--s3)';
-}
+function toggleMute(){muted=!muted;if(localStream)localStream.getAudioTracks().forEach(t=>t.enabled=!muted);document.getElementById('btn-mute').textContent=muted?'🔇':'🎙️';document.getElementById('btn-mute').style.background=muted?'#ff5c5c':'var(--s3)';}
+function toggleSpeaker(){const b=document.getElementById('btn-spk');b._on=!b._on;b.style.background=b._on?'var(--accent)':'var(--s3)';}
 
 /* ══ INIT ══ */
 (async()=>{
   await openIDB();
   initPWA();
-
   const unlockAudio=()=>{try{getAC().resume();}catch(e){}};
   document.addEventListener('touchstart',unlockAudio,{once:true});
   document.addEventListener('click',unlockAudio,{once:true});
-
-  // Bestehende Session laden
-  // PASSWORD_RECOVERY wird vom onAuthStateChange-Listener behandelt
   const hash=window.location.hash;
-  const isEmailLink=hash.includes('access_token');
-
-  if(isEmailLink){
+  if(hash.includes('access_token')){
     await new Promise(r=>setTimeout(r,800));
-    if(!me){
-      const{data}=await sb.auth.getSession();
-      if(data?.session?.user)await onLogin(data.session.user);
-    }
+    if(!me){const{data}=await sb.auth.getSession();if(data?.session?.user)await onLogin(data.session.user);}
   } else {
     const{data}=await sb.auth.getSession();
     if(data?.session?.user)await onLogin(data.session.user);
