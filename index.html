@@ -781,30 +781,28 @@ async function onLogin(user){
   subscribeNewChats();
 }
 
-/* ══ AUTH STATE LISTENER (für E-Mail-Bestätigung & Reset) ══ */
+/* ══ AUTH STATE LISTENER ══
+   Nur für PASSWORD_RECOVERY (Reset-Link aus E-Mail) und
+   für E-Mail-Bestätigung (wenn noch nicht eingeloggt und kein me).
+   Normaler Login läuft direkt über doLogin() → onLogin().
+══ */
 sb.auth.onAuthStateChange(async(event,session)=>{
-  if(event==='SIGNED_IN'&&session?.user&&!me){
-    // Kam gerade von E-Mail-Bestätigung oder Password-Reset-Link
-    const u=session.user;
-    // Prüfe ob Password-Reset (recovery)
-    const hash=window.location.hash;
-    const params=new URLSearchParams(hash.replace('#',''));
-    const type=params.get('type');
-    if(type==='recovery'){
-      // Passwort-Reset-Formular anzeigen
-      document.getElementById('s-auth').classList.remove('off');
-      document.getElementById('app').style.display='none';
-      showResetForm();
-      me=u;// session speichern für updateUser
-      return;
-    }
-    // Normale Anmeldung / E-Mail-Bestätigung
-    await onLogin(u);
-  } else if(event==='PASSWORD_RECOVERY'){
+  if(event==='PASSWORD_RECOVERY'){
+    // User hat auf Password-Reset-Link in der E-Mail geklickt
     document.getElementById('s-auth').classList.remove('off');
     document.getElementById('app').style.display='none';
-    me=session?.user||me;
+    if(session?.user)me=session.user;
     showResetForm();
+  } else if(event==='SIGNED_IN'&&session?.user&&!me){
+    // Nur aktiv wenn noch KEIN me gesetzt ist
+    // → bedeutet: Seite wurde neu geladen nach E-Mail-Bestätigung
+    const hash=window.location.hash;
+    if(hash.includes('type=recovery')||hash.includes('type=signup')){
+      // E-Mail-Bestätigung: direkt einloggen
+      await onLogin(session.user);
+      // Hash aus URL entfernen
+      history.replaceState(null,'',window.location.pathname);
+    }
   } else if(event==='SIGNED_OUT'){
     me=null;
   }
@@ -1491,25 +1489,20 @@ function toggleSpeaker(){
   document.addEventListener('touchstart',unlockAudio,{once:true});
   document.addEventListener('click',unlockAudio,{once:true});
 
-  // URL-Hash auf Recovery/Confirm prüfen (für E-Mail-Links)
+  // Bestehende Session laden
+  // PASSWORD_RECOVERY wird vom onAuthStateChange-Listener behandelt
   const hash=window.location.hash;
-  if(hash&&hash.includes('access_token')){
-    // Supabase verarbeitet den Hash automatisch via onAuthStateChange
-    // Wir warten kurz und prüfen dann die Session
-    await new Promise(r=>setTimeout(r,500));
-  }
+  const isEmailLink=hash.includes('access_token');
 
-  const{data}=await sb.auth.getSession();
-  if(data?.session?.user){
-    // Falls Recovery-Token: onAuthStateChange kümmert sich darum
-    const hash=window.location.hash;
-    const params=new URLSearchParams(hash.replace('#',''));
-    const type=params.get('type');
-    if(type==='recovery'){
-      // Wird von onAuthStateChange behandelt
-      return;
+  if(isEmailLink){
+    await new Promise(r=>setTimeout(r,800));
+    if(!me){
+      const{data}=await sb.auth.getSession();
+      if(data?.session?.user)await onLogin(data.session.user);
     }
-    await onLogin(data.session.user);
+  } else {
+    const{data}=await sb.auth.getSession();
+    if(data?.session?.user)await onLogin(data.session.user);
   }
 })();
 </script>
