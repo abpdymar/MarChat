@@ -475,14 +475,118 @@ function playPing(){try{const c=getAC(),o=c.createOscillator(),g=c.createGain();
 function startRing(){stopRing();try{const c=getAC();ringGain=c.createGain();ringGain.gain.value=.4;ringGain.connect(c.destination);let t=c.currentTime;function r(){if(!ringGain)return;[0,.2].forEach(d=>{const o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(ringGain);o.frequency.value=440;g.gain.setValueAtTime(0,t+d);g.gain.linearRampToValueAtTime(.5,t+d+.05);g.gain.linearRampToValueAtTime(0,t+d+.18);o.start(t+d);o.stop(t+d+.2);});t+=1.2;ringNode=setTimeout(r,1200);}r();}catch(e){}}
 function stopRing(){clearTimeout(ringNode);ringNode=null;if(ringGain){try{ringGain.disconnect();}catch(e){}ringGain=null;}}
 
-async function askNotif(){if(!('Notification'in window))return;if(Notification.permission==='default'){await Notification.requestPermission();}}
-function notify(title,body,cb){if(!('Notification'in window)||Notification.permission!=='granted')return;if(document.visibilityState==='visible'&&document.hasFocus())return;try{const n=new Notification(title,{body,icon:'icon-192.png',tag:'cf-msg',renotify:true});if(cb)n.onclick=()=>{window.focus();n.close();cb()};}catch(e){}}
-function notifyCall(name){if(!('Notification'in window)||Notification.permission!=='granted')return;try{const n=new Notification('📞 Eingehender Anruf',{body:name+' ruft an',icon:'icon-192.png',tag:'cf-call',renotify:true,requireInteraction:true});n.onclick=()=>{window.focus();n.close();acceptCall()};}catch(e){}}
+// ── VAPID Public Key (ersetze mit deinem eigenen, siehe Anleitung unten) ──────
+// Generieren: https://vapidkeys.com  oder  npx web-push generate-vapid-keys
+// Den PUBLIC KEY hier eintragen, den PRIVATE KEY als Supabase Secret speichern.
+const VAPID_PUBLIC_KEY = 'DEIN_VAPID_PUBLIC_KEY_HIER';
+
+let swReg = null; // ServiceWorker Registration (global für Push-Subscribe)
+
+async function askNotif(){
+  if(!('Notification' in window)) return;
+  if(Notification.permission === 'default'){
+    await Notification.requestPermission();
+  }
+  // Web Push Subscription registrieren wenn erlaubt
+  if(Notification.permission === 'granted' && swReg){
+    await subscribePush();
+  }
+}
+
+// Lokale Notification (Fallback wenn App im Vordergrund oder kein Push nötig)
+function notify(title,body,cb){
+  if(!('Notification'in window)||Notification.permission!=='granted')return;
+  if(document.visibilityState==='visible'&&document.hasFocus())return;
+  try{
+    const n=new Notification(title,{body,icon:'icon-192.png',tag:'cf-msg',renotify:true});
+    if(cb)n.onclick=()=>{window.focus();n.close();cb()};
+  }catch(e){}
+}
+function notifyCall(name){
+  if(!('Notification'in window)||Notification.permission!=='granted')return;
+  try{
+    const n=new Notification('📞 Eingehender Anruf',{body:name+' ruft an',icon:'icon-192.png',tag:'cf-call',renotify:true,requireInteraction:true});
+    n.onclick=()=>{window.focus();n.close();acceptCall()};
+  }catch(e){}
+}
+
+// ── Web Push Subscription beim Browser anmelden ──────────────────────────────
+async function subscribePush(){
+  if(!swReg || !me) return;
+  // Schon subscribed? Altes Sub aus Supabase laden
+  try{
+    const existing = await swReg.pushManager.getSubscription();
+    if(existing){
+      await savePushSub(existing);
+      return;
+    }
+    // VAPID_PUBLIC_KEY noch nicht gesetzt → überspringen
+    if(VAPID_PUBLIC_KEY === 'DEIN_VAPID_PUBLIC_KEY_HIER') return;
+    const sub = await swReg.pushManager.subscribe({
+      userVisibleOnly: true,
+      applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
+    });
+    await savePushSub(sub);
+  }catch(e){
+    console.warn('Push-Subscription fehlgeschlagen:', e);
+  }
+}
+
+async function savePushSub(sub){
+  // Subscription-Objekt in Supabase speichern (Tabelle: push_subscriptions)
+  await sb.from('push_subscriptions').upsert({
+    user_id: me.id,
+    subscription: sub.toJSON(),
+    updated_at: new Date().toISOString()
+  }, { onConflict: 'user_id,endpoint' }).catch(()=>{});
+}
+
+// ── Push-Notification über Edge Function senden ──────────────────────────────
+async function sendPushToUser(recipientId, title, body, convId){
+  // Nur senden wenn VAPID konfiguriert
+  if(VAPID_PUBLIC_KEY === 'DEIN_VAPID_PUBLIC_KEY_HIER') return;
+  try{
+    await fetch(`${SUPA_URL}/functions/v1/send-push`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${SUPA_KEY}`
+      },
+      body: JSON.stringify({ recipient_id: recipientId, title, body, conv_id: convId })
+    });
+  }catch(e){ console.warn('Push senden fehlgeschlagen:', e); }
+}
+
+// Base64url → Uint8Array (für VAPID applicationServerKey)
+function urlBase64ToUint8Array(base64String){
+  const padding = '='.repeat((4 - base64String.length % 4) % 4);
+  const base64 = (base64String + padding).replace(/-/g,'+').replace(/_/g,'/');
+  const raw = atob(base64);
+  return Uint8Array.from([...raw].map(c => c.charCodeAt(0)));
+}
 
 function initPWA(){
-  if('serviceWorker'in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{});}
-  window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstall=e;if(!localStorage.getItem('cf_nodismiss')){setTimeout(()=>document.getElementById('install-banner').classList.remove('off'),4000);}});
-  window.addEventListener('appinstalled',()=>{document.getElementById('install-banner').classList.add('off');deferredInstall=null;});
+  if('serviceWorker' in navigator){
+    navigator.serviceWorker.register('sw.js').then(reg => {
+      swReg = reg;
+      // Warten bis SW aktiv ist, dann Push-Sub prüfen
+      if(reg.active) subscribePush().catch(()=>{});
+      reg.addEventListener('updatefound', ()=>{
+        reg.installing?.addEventListener('statechange', e => {
+          if(e.target.state === 'activated') subscribePush().catch(()=>{});
+        });
+      });
+    }).catch(()=>{});
+  }
+  window.addEventListener('beforeinstallprompt',e=>{
+    e.preventDefault();deferredInstall=e;
+    if(!localStorage.getItem('cf_nodismiss')){
+      setTimeout(()=>document.getElementById('install-banner').classList.remove('off'),4000);
+    }
+  });
+  window.addEventListener('appinstalled',()=>{
+    document.getElementById('install-banner').classList.add('off');deferredInstall=null;
+  });
 }
 function doInstall(){if(!deferredInstall)return;deferredInstall.prompt();deferredInstall.userChoice.then(()=>{deferredInstall=null;document.getElementById('install-banner').classList.add('off');});}
 function dismissInstall(){document.getElementById('install-banner').classList.add('off');localStorage.setItem('cf_nodismiss','1');}
@@ -648,6 +752,8 @@ async function onLogin(user){
   await loadConvs();
   subscribeCallSig();
   subscribeNewChats();
+  // Push-Subscription nach Login registrieren
+  if(swReg) subscribePush().catch(()=>{});
 }
 
 sb.auth.onAuthStateChange(async(event,session)=>{
@@ -912,6 +1018,20 @@ async function sendMsg(){
     const i=allConvs.findIndex(c=>c.id===activeConv.id);
     if(i>-1){allConvs[i].last_msg=content;allConvs[i].updated_at=new Date().toISOString();allConvs.sort((a,b)=>new Date(b.updated_at)-new Date(a.updated_at));saveMeta(allConvs[i]);}
     renderConvs(allConvs);
+    // ── Web Push an Empfänger senden (funktioniert auch wenn App geschlossen) ──
+    if(activeConv.type==='private' && activeConv._other){
+      const senderName=myProfile?.display_name||me.email.split('@')[0];
+      sendPushToUser(activeConv._other.id, senderName, content, activeConv.id);
+    } else if(activeConv.type==='group'){
+      // Bei Gruppen: alle anderen Teilnehmer pushen
+      sb.from('participants').select('user_id').eq('conv_id',activeConv.id).neq('user_id',me.id)
+        .then(({data:pts})=>{
+          if(pts) pts.forEach(p=>{
+            const senderName=myProfile?.display_name||me.email.split('@')[0];
+            sendPushToUser(p.user_id, `${senderName} (${activeConv.name||'Gruppe'})`, content, activeConv.id);
+          });
+        });
+    }
   }catch(e){console.error('sendMsg error:',e);}
 }
 
