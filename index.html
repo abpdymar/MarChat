@@ -412,7 +412,7 @@ const sb=window.supabase.createClient(SUPA_URL,SUPA_KEY,{
   auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,storage:localStorage}
 });
 
-let me=null,myProfile=null,activeConv=null,msgSub=null,callSub=null;
+let me=null,myProfile=null,activeConv=null,msgSub=null,callSub=null,globalMsgSub=null;
 let allConvs=[],currentTab='chats',grpMembers=[];
 let localStream=null,peerConn=null,callTimerInt=null,callSecs=0;
 let callState='idle',incomingCallData=null;
@@ -478,7 +478,7 @@ function stopRing(){clearTimeout(ringNode);ringNode=null;if(ringGain){try{ringGa
 // ── VAPID Public Key (ersetze mit deinem eigenen, siehe Anleitung unten) ──────
 // Generieren: https://vapidkeys.com  oder  npx web-push generate-vapid-keys
 // Den PUBLIC KEY hier eintragen, den PRIVATE KEY als Supabase Secret speichern.
-const VAPID_PUBLIC_KEY = 'BGoDZzJSFb8nW8wIi9wJYFoviPbVtDQI50g0O-wp9vqajuFgR2i41-mWjtfgFHExOGj-qQDog57IosgrJRDOD3A';
+const VAPID_PUBLIC_KEY = 'DEIN_VAPID_PUBLIC_KEY_HIER';
 
 let swReg = null; // ServiceWorker Registration (global für Push-Subscribe)
 
@@ -752,6 +752,7 @@ async function onLogin(user){
   await loadConvs();
   subscribeCallSig();
   subscribeNewChats();
+  subscribeGlobalMsgs(); // ← Notifications für alle Chats
   // Push-Subscription nach Login registrieren
   if(swReg) subscribePush().catch(()=>{});
 }
@@ -793,6 +794,7 @@ async function doLogout(){
   me=null;myProfile=null;activeConv=null;allConvs=[];
   if(msgSub){msgSub.unsubscribe();msgSub=null;}
   if(callSub){callSub.unsubscribe();callSub=null;}
+  if(globalMsgSub){globalMsgSub.unsubscribe();globalMsgSub=null;}
   document.getElementById('app').style.display='none';
   document.getElementById('ca').innerHTML='<div class="empty-ca"><div class="big">💬</div><h2>MarChat</h2><p>Tippe auf ✉️ um einen Chat zu starten.</p></div>';
   switchTab('login');
@@ -881,6 +883,39 @@ async function loadConvs(){
   }catch(e){console.error('loadConvs error:',e);renderConvs([]);}
 }
 function subscribeNewChats(){sb.channel('new-chats-'+me.id).on('broadcast',{event:'chat-request'},async()=>{await loadConvs();}).subscribe();}
+
+// ── Globaler Listener: Notifications für ALLE Chats, nicht nur den aktiven ──
+function subscribeGlobalMsgs(){
+  if(globalMsgSub){globalMsgSub.unsubscribe();globalMsgSub=null;}
+  // Auf neue Nachrichten in der gesamten messages-Tabelle hören
+  // Gefiltert wird dann per sender_id (nicht eigene Nachrichten)
+  globalMsgSub=sb.channel('global-msgs-'+me.id)
+    .on('postgres_changes',{event:'INSERT',schema:'public',table:'messages'},async p=>{
+      const msg=p.new;
+      // Eigene Nachrichten ignorieren
+      if(msg.sender_id===me.id) return;
+      // Prüfen ob wir Teilnehmer dieses Chats sind
+      const conv=allConvs.find(c=>c.id===msg.conv_id);
+      if(!conv) return;
+      // Nicht nochmal benachrichtigen wenn Chat gerade offen und fokussiert
+      if(activeConv?.id===msg.conv_id && document.visibilityState==='visible' && document.hasFocus()) return;
+      // Notification anzeigen
+      const senderName=msg.sender_name||'Jemand';
+      const convName=conv.type==='group'?(conv.name||'Gruppe'):senderName;
+      const body=msg.type==='image'?'📷 Bild geschickt':msg.type==='file'?'📎 Datei geschickt':(msg.content||'');
+      // Lokale Notification (App offen aber anderer Chat)
+      notify(convName, body, ()=>openConv(conv));
+      // Conversation-Liste aktualisieren
+      const i=allConvs.findIndex(c=>c.id===msg.conv_id);
+      if(i>-1){
+        allConvs[i].last_msg=msg.content||'📎';
+        allConvs[i].updated_at=msg.created_at;
+        allConvs.sort((a,b)=>new Date(b.updated_at)-new Date(a.updated_at));
+        renderConvs(allConvs);
+      }
+      playPing();
+    }).subscribe();
+}
 
 function renderConvs(convs){
   const el=document.getElementById('chat-list');
