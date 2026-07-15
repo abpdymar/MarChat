@@ -1,0 +1,921 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="de">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="theme-color" content="#6c63ff"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-title" content="MarChat Lite"/>
+<link rel="manifest" href="manifest.json"/>
+<link rel="apple-touch-icon" href="apple-touch-icon.png"/>
+<link rel="icon" type="image/png" href="icon-192.png"/>
+<title>MarChat Lite</title>
+<style type="text/css">
+body { margin:0; padding:0; background:#111; color:#eee; font-family:Arial,Helvetica,sans-serif; font-size:14px; }
+a { color:#8880ff; }
+h1 { font-size:20px; color:#8880ff; margin:0 0 4px 0; }
+p  { margin:4px 0; color:#aaa; font-size:12px; }
+
+/* ── CARD ── */
+.card { background:#1e1e2e; border:1px solid #333; padding:18px 16px; margin:20px auto; max-width:380px; width:95%; }
+.card-title { font-size:18px; font-weight:bold; color:#8880ff; margin-bottom:4px; }
+.card-sub   { color:#888; font-size:12px; margin-bottom:14px; }
+
+/* ── TABS ── */
+.tabs { width:100%; border-collapse:collapse; margin-bottom:14px; }
+.tabs td { width:50%; text-align:center; padding:7px 4px; background:#111; cursor:pointer; border:1px solid #333; font-size:13px; color:#888; }
+.tabs td.on { background:#2a2a3e; color:#eee; font-weight:bold; }
+
+/* ── FORM ── */
+.fld { margin-bottom:10px; }
+.fld label { display:block; font-size:11px; color:#888; margin-bottom:3px; text-transform:uppercase; }
+.fld input  { width:100%; padding:9px 10px; background:#111; color:#eee; border:1px solid #444; font-size:14px; }
+.fld input:focus { border-color:#8880ff; outline:none; }
+
+/* ── BUTTONS ── */
+.btn       { display:block; width:100%; padding:11px 10px; background:#6c63ff; color:#fff; border:none; font-size:14px; font-weight:bold; cursor:pointer; text-align:center; margin-top:6px; }
+.btn:active { background:#5550cc; }
+.btn-grey  { display:block; width:100%; padding:9px 10px; background:#333; color:#ccc; border:none; font-size:13px; cursor:pointer; text-align:center; margin-top:6px; }
+.btn-sm    { display:inline-block; padding:5px 12px; background:#6c63ff; color:#fff; border:none; font-size:12px; font-weight:bold; cursor:pointer; }
+.btn-sm-g  { display:inline-block; padding:5px 10px; background:#333; color:#aaa; border:1px solid #444; font-size:12px; cursor:pointer; }
+.btn-sm-r  { display:inline-block; padding:5px 10px; background:#552222; color:#ff9090; border:1px solid #663333; font-size:12px; cursor:pointer; }
+
+/* ── MESSAGES ── */
+.msg-box { padding:9px 11px; font-size:12px; margin-top:10px; display:none; }
+.msg-box.err { background:#331111; border:1px solid #663333; color:#ff9090; }
+.msg-box.ok  { background:#112211; border:1px solid #336633; color:#66cc66; }
+
+/* ── INSTALL BANNER ── */
+#install-banner { display:none; position:fixed; left:8px; right:8px; bottom:8px; z-index:500; background:#1e1e2e; border:1px solid #6c63ff; padding:10px 12px; }
+#install-banner table { width:100%; border-collapse:collapse; }
+#install-banner .ib-txt { font-size:12px; color:#eee; }
+#install-banner .ib-sub { font-size:11px; color:#888; }
+#install-banner .ib-btns { text-align:right; white-space:nowrap; }
+
+/* ── APP LAYOUT ── */
+#app        { display:none; }
+#sidebar    { background:#1a1a28; border-bottom:2px solid #6c63ff; padding:8px; }
+#sb-head    { font-size:16px; font-weight:bold; color:#8880ff; margin-bottom:6px; }
+.sb-tabs    { width:100%; border-collapse:collapse; margin-bottom:6px; }
+.sb-tabs td { width:50%; text-align:center; padding:6px; background:#111; border:1px solid #333; font-size:12px; color:#888; cursor:pointer; }
+.sb-tabs td.on { background:#2a2a3e; color:#eee; font-weight:bold; }
+
+/* ── CHAT LIST ── */
+.ci         { border-bottom:1px solid #222; padding:8px 6px; cursor:pointer; }
+.ci.on      { background:#221e44; }
+.ci:active  { background:#2a2640; }
+.ci-name    { font-size:13px; font-weight:bold; color:#eee; }
+.ci-prev    { font-size:11px; color:#777; margin-top:2px; }
+.ci-time    { font-size:10px; color:#555; float:right; }
+.badge      { display:inline-block; background:#6c63ff; color:#fff; font-size:10px; padding:1px 5px; }
+
+/* ── MY BAR ── */
+#my-bar     { background:#111; border-top:1px solid #333; padding:7px 8px; }
+.my-name    { font-size:13px; font-weight:bold; }
+.my-email   { font-size:11px; color:#777; }
+
+/* ── CHAT AREA ── */
+#ca         { display:none; }
+#ca-head    { background:#1a1a28; border-bottom:1px solid #333; padding:8px; }
+#ca-title   { font-size:14px; font-weight:bold; display:inline; }
+#ca-sub     { font-size:11px; color:#777; }
+#msgs       { padding:8px 6px; min-height:200px; overflow-y:auto; }
+.msg-wrap-me   { text-align:right; margin:4px 0; }
+.msg-wrap-them { text-align:left;  margin:4px 0; }
+.bub-me        { display:inline-block; background:#6c63ff; color:#fff; padding:7px 11px; font-size:13px; max-width:78%; text-align:left; }
+.bub-them      { display:inline-block; background:#2a2a3a; color:#eee; border:1px solid #333; padding:7px 11px; font-size:13px; max-width:78%; text-align:left; }
+.msg-time      { font-size:10px; color:#666; margin-top:2px; }
+.msg-sender    { font-size:10px; color:#a090ff; margin-bottom:2px; }
+.date-sep      { text-align:center; color:#555; font-size:11px; margin:6px 0; }
+
+/* ── INPUT BAR ── */
+#inp-bar    { background:#1a1a28; border-top:1px solid #333; padding:6px; }
+#msg-inp    { width:78%; padding:8px; background:#111; color:#eee; border:1px solid #444; font-size:13px; }
+#send-btn   { width:19%; padding:8px 0; background:#6c63ff; color:#fff; border:none; font-size:16px; font-weight:bold; cursor:pointer; vertical-align:top; }
+
+/* ── MODAL ── */
+.modal-wrap { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,.85); z-index:99; }
+.modal-box  { background:#1e1e2e; border:1px solid #444; margin:30px auto; padding:18px 16px; max-width:360px; width:92%; }
+.modal-box h3 { font-size:15px; margin:0 0 12px 0; }
+
+/* ── SEARCH RESULTS ── */
+.ur         { border:1px solid #333; padding:8px; margin-bottom:6px; cursor:pointer; background:#161624; }
+.ur:active  { background:#221e44; }
+.ur-name    { font-size:13px; font-weight:bold; }
+.ur-email   { font-size:11px; color:#777; }
+
+/* ── CHIPS ── */
+.chip { display:inline-block; background:#2a2a3e; border:1px solid #444; padding:3px 7px; font-size:11px; margin:2px; }
+.chip button { border:none; background:none; color:#aaa; cursor:pointer; font-size:13px; }
+
+/* ── MISC ── */
+.req-banner { background:#1a1a30; border:1px solid #443388; padding:12px; margin:8px; text-align:center; }
+.req-banner p { font-size:12px; color:#aaa; margin-bottom:10px; }
+.empty-msg  { text-align:center; color:#555; padding:20px; font-size:13px; }
+.spinner-txt { color:#888; font-size:13px; }
+.poll-bar   { background:#111; text-align:center; padding:2px; font-size:10px; color:#555; }
+.new-btns   { padding:8px; background:#111; border-top:1px solid #222; }
+.btn-call   { display:inline-block; padding:5px 12px; background:#25a244; color:#fff; border:none; font-size:12px; font-weight:bold; cursor:pointer; margin-left:6px; }
+.call-msg   { background:#1a2e1a; border:1px solid #336633; padding:8px 11px; font-size:12px; margin:4px 0; }
+.call-msg a { color:#66cc66; font-weight:bold; }
+</style>
+</head>
+<body>
+
+<!-- ══ AUTH ══ -->
+<div id="s-auth">
+  <div class="card">
+    <div class="card-title">&#128172; MarChat Lite</div>
+    <div class="card-sub" id="auth-sub">Anmelden oder Registrieren</div>
+    <table class="tabs" id="auth-tabs">
+      <tr>
+        <td class="on" onclick="switchTab('login')" id="tab-login">Anmelden</td>
+        <td onclick="switchTab('register')" id="tab-reg">Registrieren</td>
+      </tr>
+    </table>
+
+    <div id="f-login">
+      <div class="fld"><label>E-Mail</label><input type="email" id="l-email" placeholder="mail@example.com"/></div>
+      <div class="fld"><label>Passwort</label><input type="password" id="l-pw" placeholder="Passwort"/></div>
+      <button class="btn" id="btn-login" onclick="doLogin()">Anmelden &#8594;</button>
+    </div>
+
+    <div id="f-reg" style="display:none">
+      <div class="fld"><label>Dein Name</label><input type="text" id="r-name" placeholder="Max Mustermann"/></div>
+      <div class="fld"><label>E-Mail</label><input type="email" id="r-email" placeholder="mail@example.com"/></div>
+      <div class="fld"><label>Passwort</label><input type="password" id="r-pw" placeholder="min. 6 Zeichen"/></div>
+      <button class="btn" id="btn-register" onclick="doRegister()">Registrieren &#8594;</button>
+    </div>
+
+    <div class="msg-box err" id="auth-err"></div>
+    <div class="msg-box ok"  id="auth-ok"></div>
+  </div>
+</div>
+
+<!-- ══ APP ══ -->
+<div id="app">
+
+  <!-- Sidebar -->
+  <div id="sidebar">
+    <div id="sb-head">&#128172; MarChat Lite</div>
+    <table class="sb-tabs">
+      <tr>
+        <td class="on" id="sbt-chats"  onclick="sbTab('chats')">Chats</td>
+        <td id="sbt-groups" onclick="sbTab('groups')">Gruppen</td>
+      </tr>
+    </table>
+    <div>
+      <input type="text" id="search-inp" placeholder="Suchen..." oninput="filterChats(this.value)"
+        style="width:100%;padding:6px 8px;background:#111;color:#eee;border:1px solid #333;font-size:13px;box-sizing:border-box;"/>
+    </div>
+    <div id="chat-list"><div class="spinner-txt" style="padding:16px">Laden...</div></div>
+    <div class="new-btns">
+      <button class="btn-sm" onclick="openNewChat()" style="margin-right:6px">&#9993; Neuer Chat</button>
+      <button class="btn-sm" onclick="openNewGroup()">&#128101; Neue Gruppe</button>
+    </div>
+    <div id="my-bar">
+      <div class="my-name" id="my-name">&#8212;</div>
+      <div class="my-email" id="my-email">&#8212;</div>
+      <button class="btn-sm-g" onclick="doLogout()" style="margin-top:5px">Logout</button>
+    </div>
+    <div class="poll-bar" id="poll-info">Polling aktiv</div>
+  </div>
+
+  <!-- Chat Area -->
+  <div id="ca">
+    <div id="ca-head">
+      <table style="width:100%;border-collapse:collapse"><tr>
+        <td style="vertical-align:middle;width:62px">
+          <button class="btn-sm-g" onclick="showSB()" style="font-size:12px;white-space:nowrap">&#8592; Zur&#252;ck</button>
+        </td>
+        <td style="vertical-align:middle;padding-left:6px">
+          <span id="ca-title" style="font-size:14px;font-weight:bold">&#8212;</span><br/>
+          <span id="ca-sub" style="font-size:11px;color:#777"></span>
+        </td>
+        <td style="vertical-align:middle;text-align:right;width:76px" id="ca-call-td"></td>
+      </tr></table>
+    </div>
+    <div id="msgs"><div class="empty-msg">&#128172; Sag Hallo!</div></div>
+    <div id="req-area"></div>
+    <div id="inp-bar" style="display:none">
+      <input type="text" id="msg-inp" placeholder="Nachricht..." onkeydown="hKey(event)"/>
+      <button id="send-btn" onclick="sendMsg()">&#10148;</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══ MODAL: Neuer Chat ══ -->
+<div class="modal-wrap" id="m-newchat">
+  <div class="modal-box">
+    <h3>&#128172; Neuen Chat starten</h3>
+    <div class="fld">
+      <label>Name oder E-Mail</label>
+      <input type="text" id="search-user" placeholder="z.B. Max..." oninput="searchUsers(this.value)" autocomplete="off"/>
+    </div>
+    <div id="user-results"><div class="empty-msg">Tippe einen Namen ein...</div></div>
+    <br/>
+    <button class="btn-grey" onclick="closeModal('m-newchat')">Schliessen</button>
+  </div>
+</div>
+
+<!-- ══ MODAL: Neue Gruppe ══ -->
+<div class="modal-wrap" id="m-newgroup">
+  <div class="modal-box">
+    <h3>&#128101; Neue Gruppe</h3>
+    <div class="fld"><label>Gruppenname</label><input type="text" id="grp-name" placeholder="z.B. Familie..."/></div>
+    <div class="fld">
+      <label>Mitglieder suchen</label>
+      <input type="text" id="grp-search" placeholder="Name oder E-Mail..." oninput="searchForGroup(this.value)" autocomplete="off"/>
+    </div>
+    <div id="grp-member-chips" style="margin-bottom:8px"></div>
+    <div id="grp-results"></div>
+    <br/>
+    <button class="btn" onclick="createGroup()">Gruppe erstellen</button>
+    <button class="btn-grey" onclick="closeModal('m-newgroup')">Abbrechen</button>
+  </div>
+</div>
+
+<script type="text/javascript">
+// ════════════════════════════════════════════════
+//  MarChat LITE — ES5 + XHR + Polling
+//  Opera Mini / Android 4.0 kompatibel
+//  Kein Flex, keine CSS-Variablen, kein SDK
+// ════════════════════════════════════════════════
+
+var SUPA_URL = 'https://sdsyiopaaioczfevdtrf.supabase.co';
+var SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNkc3lpb3BhYWlvY3pmZXZkdHJmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc1NDI5MTIsImV4cCI6MjA5MzExODkxMn0.U7zIcserliJm0P34zrfHhniAcxGcDktSPko9CzHAUCo';
+var POLL_MS  = 5000;
+
+var me = null;
+var myProfile = null;
+var activeConv = null;
+var allConvs = [];
+var currentTab = 'chats';
+var grpMembers = [];
+var profileCache = {};
+var pollTimer = null;
+var lastMsgTime = null;
+var knownMsgIds = {};
+var aliases = {};
+
+try { aliases = JSON.parse(localStorage.getItem('cfl_aliases') || '{}'); } catch(e) {}
+function saveAliases() { try { localStorage.setItem('cfl_aliases', JSON.stringify(aliases)); } catch(e) {} }
+function saveSession(d) { try { localStorage.setItem('cfl_sess', JSON.stringify(d)); } catch(e) {} }
+function loadSession() { try { return JSON.parse(localStorage.getItem('cfl_sess') || 'null'); } catch(e) { return null; } }
+function clearSession() { try { localStorage.removeItem('cfl_sess'); } catch(e) {} }
+
+// ── XHR ──
+function xhr(method, url, body, token, cb) {
+  var req;
+  try {
+    req = new XMLHttpRequest();
+  } catch(e) {
+    try { req = new ActiveXObject('Microsoft.XMLHTTP'); } catch(e2) { cb(null,'Kein XHR'); return; }
+  }
+  req.open(method, url, true);
+  req.setRequestHeader('apikey', SUPA_KEY);
+  req.setRequestHeader('Content-Type', 'application/json');
+  req.setRequestHeader('Accept', 'application/json');
+  if (token) req.setRequestHeader('Authorization', 'Bearer ' + token);
+  req.onreadystatechange = function() {
+    if (req.readyState !== 4) return;
+    var data = null;
+    try { data = JSON.parse(req.responseText); } catch(e) { data = req.responseText; }
+    if (req.status >= 200 && req.status < 300) {
+      cb(data, null);
+    } else {
+      var msg = (data && (data.error_description || data.message || data.error || data.msg)) || ('HTTP ' + req.status);
+      cb(null, msg);
+    }
+  };
+  req.onerror = function() { cb(null, 'Netzwerkfehler'); };
+  try {
+    req.send(body ? JSON.stringify(body) : null);
+  } catch(e) { cb(null, String(e)); }
+}
+
+function sbGet(path, token, cb)          { xhr('GET',   SUPA_URL+'/rest/v1/'+path, null,  token, cb); }
+function sbPost(path, token, body, cb)   { xhr('POST',  SUPA_URL+'/rest/v1/'+path, body,  token, cb); }
+function sbPatch(path, token, body, cb)  { xhr('PATCH', SUPA_URL+'/rest/v1/'+path, body,  token, cb); }
+
+// ── Hilfsfunktionen ──
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function ini(n) {
+  var parts = (n||'?').split(' '), r = '';
+  for (var i=0; i<parts.length && r.length<2; i++) if(parts[i]) r += parts[i][0].toUpperCase();
+  return r || '?';
+}
+function fmtT(ts) {
+  var d = new Date(ts);
+  var h = d.getHours(), m = d.getMinutes();
+  return (h<10?'0':'')+h+':'+(m<10?'0':'')+m;
+}
+function fmtD(ts) {
+  var d = new Date(ts), t = new Date();
+  if (d.toDateString()===t.toDateString()) return 'Heute';
+  var y = new Date(); y.setDate(y.getDate()-1);
+  if (d.toDateString()===y.toDateString()) return 'Gestern';
+  return d.getDate()+'.'+(d.getMonth()+1)+'.'+d.getFullYear();
+}
+function trim(s) { return s.replace(/^\s+|\s+$/g,''); }
+function showErr(id, msg) { var e=document.getElementById(id); if(!e)return; e.innerHTML=msg; e.className='msg-box err'; e.style.display='block'; }
+function showOk(id, msg)  { var e=document.getElementById(id); if(!e)return; e.innerHTML=msg; e.className='msg-box ok';  e.style.display='block'; }
+function hM(id) { var e=document.getElementById(id); if(e) e.style.display='none'; }
+function getDN(c) { return aliases[c.id]||(c._display_name||c.name||'Unbekannt'); }
+function scrollB() { var w=document.getElementById('msgs'); if(w) w.scrollTop=w.scrollHeight; }
+
+function openModal(id) { var e=document.getElementById(id); if(e) e.style.display='block'; }
+function closeModal(id) { var e=document.getElementById(id); if(e) e.style.display='none'; }
+
+function showChat() {
+  document.getElementById('sidebar').style.display='none';
+  document.getElementById('ca').style.display='block';
+}
+function showSB() {
+  document.getElementById('ca').style.display='none';
+  document.getElementById('sidebar').style.display='block';
+}
+
+// ── AUTH TABS ──
+function switchTab(t) {
+  document.getElementById('tab-login').className = t==='login' ? 'on' : '';
+  document.getElementById('tab-reg').className   = t==='register' ? 'on' : '';
+  document.getElementById('f-login').style.display = t==='login' ? '' : 'none';
+  document.getElementById('f-reg').style.display   = t==='register' ? '' : 'none';
+  hM('auth-err'); hM('auth-ok');
+}
+
+// ── LOGIN ──
+function doLogin() {
+  hM('auth-err'); hM('auth-ok');
+  var email = trim(document.getElementById('l-email').value);
+  var pw    = document.getElementById('l-pw').value;
+  if (!email||!pw) { showErr('auth-err','E-Mail und Passwort eingeben.'); return; }
+  var btn = document.getElementById('btn-login');
+  btn.disabled = true; btn.innerHTML = 'Anmelden...';
+  xhr('POST', SUPA_URL+'/auth/v1/token?grant_type=password', {email:email,password:pw}, null, function(data,err) {
+    btn.disabled = false; btn.innerHTML = 'Anmelden &#8594;';
+    if (err||!data||!data.access_token) { showErr('auth-err','Fehler: '+(err||'Unbekannt')); return; }
+    var sess = {id:data.user.id,email:data.user.email,access_token:data.access_token,refresh_token:data.refresh_token};
+    saveSession(sess);
+    onLogin(sess);
+  });
+}
+
+// ── REGISTER ──
+function doRegister() {
+  hM('auth-err'); hM('auth-ok');
+  var name  = trim(document.getElementById('r-name').value);
+  var email = trim(document.getElementById('r-email').value);
+  var pw    = document.getElementById('r-pw').value;
+  if (!name||!email||!pw) { showErr('auth-err','Alle Felder ausfüllen.'); return; }
+  if (pw.length<6) { showErr('auth-err','Passwort mind. 6 Zeichen.'); return; }
+  var btn = document.getElementById('btn-register');
+  btn.disabled = true; btn.innerHTML = 'Registrieren...';
+  xhr('POST', SUPA_URL+'/auth/v1/signup', {email:email,password:pw,data:{display_name:name}}, null, function(data,err) {
+    btn.disabled = false; btn.innerHTML = 'Registrieren &#8594;';
+    if (err) { showErr('auth-err','Fehler: '+err); return; }
+    if (data&&data.access_token) {
+      var sess = {id:data.user.id,email:data.user.email,access_token:data.access_token,refresh_token:data.refresh_token};
+      sbPost('profiles?on_conflict=id', sess.access_token, {id:sess.id,email:email,display_name:name}, function(){});
+      saveSession(sess);
+      onLogin(sess);
+    } else {
+      showOk('auth-ok','Registriert! Bitte E-Mail bestätigen, dann anmelden.');
+    }
+  });
+}
+
+// ── ON LOGIN ──
+function onLogin(sess) {
+  me = sess;
+  document.getElementById('s-auth').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  document.getElementById('my-email').innerHTML = esc(me.email);
+  sbGet('profiles?id=eq.'+me.id+'&limit=1', me.access_token, function(data) {
+    if (data&&data.length) {
+      myProfile = data[0];
+    } else {
+      var n = me.email.split('@')[0];
+      myProfile = {id:me.id,email:me.email,display_name:n};
+      sbPost('profiles?on_conflict=id', me.access_token, myProfile, function(){});
+    }
+    document.getElementById('my-name').innerHTML = esc(myProfile.display_name||me.email.split('@')[0]);
+  });
+  showSB();
+  loadConvs();
+  startPolling();
+}
+
+// ── LOGOUT ──
+function doLogout() {
+  stopPolling(); clearSession();
+  me=null; myProfile=null; activeConv=null; allConvs=[]; knownMsgIds={};
+  document.getElementById('app').style.display='none';
+  document.getElementById('s-auth').style.display='block';
+  document.getElementById('ca').style.display='none';
+  document.getElementById('msgs').innerHTML='<div class="empty-msg">&#128172; Sag Hallo!</div>';
+  switchTab('login');
+}
+
+// ── POLLING ──
+function startPolling() {
+  stopPolling();
+  pollTimer = setInterval(function(){ doPoll(); }, POLL_MS);
+}
+function stopPolling() { if(pollTimer){ clearInterval(pollTimer); pollTimer=null; } }
+
+function doPoll() {
+  if (!me||!activeConv) return;
+  var since = lastMsgTime || new Date(Date.now()-60000).toISOString();
+  sbGet('messages?conv_id=eq.'+activeConv.id+'&created_at=gt.'+encodeURIComponent(since)+'&order=created_at.asc&limit=30', me.access_token, function(data) {
+    if (!data||!data.length) return;
+    var kn = knownMsgIds[activeConv.id]||{};
+    var gotNew = false;
+    for (var i=0; i<data.length; i++) {
+      var m = data[i];
+      if (kn[m.id]) continue;
+      if (m.sender_id===me.id) { kn[m.id]=true; continue; }
+      kn[m.id]=true;
+      lastMsgTime = m.created_at;
+      appendMsg(m);
+      gotNew = true;
+    }
+    knownMsgIds[activeConv.id] = kn;
+    if (gotNew) scrollB();
+    // Conv-Liste aktualisieren
+    var last = data[data.length-1];
+    for (var j=0; j<allConvs.length; j++) {
+      if (allConvs[j].id===activeConv.id) {
+        allConvs[j].last_msg = last.content||'...';
+        allConvs[j].updated_at = last.created_at;
+        break;
+      }
+    }
+  });
+  // Convs refreshen (alle 3 Polls = ~15s)
+  doPoll._cnt = (doPoll._cnt||0)+1;
+  if (doPoll._cnt % 3 === 0) loadConvs();
+}
+
+// ── CONVERSATIONS ──
+function loadConvs() {
+  if (!me) return;
+  sbGet('participants?user_id=eq.'+me.id+'&select=conv_id,accepted', me.access_token, function(parts) {
+    if (!parts||!parts.length) { renderConvs([]); return; }
+    var ids=[], am={};
+    for (var i=0; i<parts.length; i++) { ids.push(parts[i].conv_id); am[parts[i].conv_id]=parts[i].accepted!==false; }
+    sbGet('conversations?id=in.('+ids.join(',')+')'+'&order=updated_at.desc', me.access_token, function(convs) {
+      if (!convs) { renderConvs([]); return; }
+      allConvs = convs;
+      var pending = allConvs.length;
+      if (!pending) { renderConvs([]); return; }
+      function done() { pending--; if(pending<=0) renderConvs(allConvs); }
+      for (var i=0; i<allConvs.length; i++) {
+        (function(c) {
+          c.accepted = am[c.id]!==false;
+          if (c.type==='private') {
+            sbGet('participants?conv_id=eq.'+c.id+'&user_id=neq.'+me.id+'&select=user_id&limit=1', me.access_token, function(oth) {
+              if (oth&&oth.length) {
+                getProf(oth[0].user_id, function(p) {
+                  if(p){c._other=p;c._display_name=p.display_name;c._avatar_id=p.id;}
+                  done();
+                });
+              } else done();
+            });
+          } else { c._display_name=c.name; c._avatar_id=c.id; done(); }
+        })(allConvs[i]);
+      }
+    });
+  });
+}
+
+function renderConvs(convs) {
+  var el = document.getElementById('chat-list');
+  var f = [];
+  for (var i=0; i<convs.length; i++) {
+    if (currentTab==='chats'?convs[i].type==='private':convs[i].type==='group') f.push(convs[i]);
+  }
+  if (!f.length) { el.innerHTML='<div class="empty-msg">'+(currentTab==='chats'?'Keine Chats.':'Keine Gruppen.')+'</div>'; return; }
+  var h='';
+  for (var i=0; i<f.length; i++) {
+    var c=f[i];
+    var on = (activeConv&&activeConv.id===c.id) ? ' on' : '';
+    var badge = c.accepted===false ? ' <span class="badge">Anfrage</span>' : '';
+    var prev  = c.accepted===false ? 'Chat-Anfrage erhalten' : (c.last_msg?esc(c.last_msg).slice(0,38):'Noch keine Nachrichten');
+    var tim   = c.updated_at ? fmtD(c.updated_at) : '';
+    h += '<div class="ci'+on+'" onclick="openConvById(\''+c.id+'\')">' +
+      '<span class="ci-time">'+tim+'</span>' +
+      '<div class="ci-name">'+esc(getDN(c))+badge+'</div>' +
+      '<div class="ci-prev">'+prev+'</div>' +
+      '</div>';
+  }
+  el.innerHTML = h;
+}
+
+function sbTab(t) {
+  currentTab = t;
+  document.getElementById('sbt-chats').className  = t==='chats'  ? 'on' : '';
+  document.getElementById('sbt-groups').className = t==='groups' ? 'on' : '';
+  renderConvs(allConvs);
+}
+function filterChats(q) {
+  q = q.toLowerCase();
+  var f=[];
+  for(var i=0;i<allConvs.length;i++) if(getDN(allConvs[i]).toLowerCase().indexOf(q)!==-1) f.push(allConvs[i]);
+  renderConvs(f);
+}
+function openConvById(id) { for(var i=0;i<allConvs.length;i++) if(allConvs[i].id===id){openConv(allConvs[i]);return;} }
+
+function openConv(conv) {
+  activeConv = conv;
+  lastMsgTime = null;
+  knownMsgIds[conv.id] = {};
+  renderConvs(allConvs);
+  showChat();
+  var dn = getDN(conv);
+  document.getElementById('ca-title').innerHTML = esc(dn);
+  document.getElementById('ca-sub').innerHTML = conv.type==='group' ? 'Gruppenchat' : 'Privater Chat';
+  // Anruf-Button in eigene Zelle
+  var callTd = document.getElementById('ca-call-td');
+  if (callTd) {
+    if (conv.type==='private') {
+      callTd.innerHTML = '<button class="btn-call" onclick="startCall()">&#128222; Anrufen</button>';
+    } else {
+      callTd.innerHTML = '';
+    }
+  }
+  document.getElementById('msgs').innerHTML = '<div class="empty-msg">Laden...</div>';
+  // Anfrage-Banner
+  var ra = document.getElementById('req-area');
+  if (conv.accepted===false) {
+    ra.innerHTML = '<div class="req-banner"><p><strong>'+esc(conv._other&&conv._other.display_name||'Jemand')+'</strong> moechte mit dir chatten.</p>' +
+      '<button class="btn-sm" onclick="acceptReq()" style="margin-right:8px">Annehmen</button>' +
+      '<button class="btn-sm-r" onclick="declineReq()">Ablehnen</button></div>';
+    document.getElementById('inp-bar').style.display='none';
+  } else {
+    ra.innerHTML='';
+    document.getElementById('inp-bar').style.display='block';
+  }
+  loadMsgs(conv.id);
+}
+
+function acceptReq() {
+  if (!activeConv) return;
+  sbPatch('participants?conv_id=eq.'+activeConv.id+'&user_id=eq.'+me.id, me.access_token, {accepted:true}, function() {
+    activeConv.accepted=true;
+    for(var i=0;i<allConvs.length;i++) if(allConvs[i].id===activeConv.id){allConvs[i].accepted=true;break;}
+    openConv(activeConv); renderConvs(allConvs);
+  });
+}
+function declineReq() {
+  if (!activeConv) return;
+  if (confirm('Ablehnen?')) {
+    var nw=[];
+    for(var i=0;i<allConvs.length;i++) if(allConvs[i].id!==activeConv.id) nw.push(allConvs[i]);
+    allConvs=nw; activeConv=null;
+    showSB(); renderConvs(allConvs);
+  }
+}
+
+// ── NACHRICHTEN ──
+function loadMsgs(cid) {
+  sbGet('messages?conv_id=eq.'+cid+'&order=created_at.asc&limit=200', me.access_token, function(data) {
+    var w=document.getElementById('msgs'); if(!w) return;
+    if (!data||!data.length) { w.innerHTML='<div class="empty-msg">Sag Hallo!</div>'; return; }
+    var kn={}, ld='', h='';
+    for (var i=0; i<data.length; i++) {
+      var m=data[i];
+      kn[m.id]=true;
+      if (m.created_at>(lastMsgTime||'')) lastMsgTime=m.created_at;
+      var d=fmtD(m.created_at);
+      if(d!==ld){ld=d;h+='<div class="date-sep">-- '+d+' --</div>';}
+      h+=bubHtml(m);
+    }
+    knownMsgIds[cid]=kn;
+    w.innerHTML=h;
+    scrollB();
+    var sub=document.getElementById('ca-sub');
+    if(sub) sub.innerHTML=data.length+' Nachrichten';
+  });
+}
+
+function bubHtml(m) {
+  var mine = me&&m.sender_id===me.id;
+  var cls  = mine ? 'msg-wrap-me' : 'msg-wrap-them';
+  var bub  = mine ? 'bub-me' : 'bub-them';
+  var senderLine = (!mine&&activeConv&&activeConv.type==='group')
+    ? '<div class="msg-sender">'+esc(m.sender_name||'?')+'</div>' : '';
+  var timeAlign = mine ? 'text-align:right' : '';
+  // Anruf-Nachricht speziell darstellen
+  var content = m.content || '';
+  var bubContent;
+  if (content.indexOf('[ANRUF]') === 0) {
+    // Jitsi-URL aus der Nachricht extrahieren
+    var urlMatch = content.match(/https:\/\/meet\.jit\.si\/\S+/);
+    var jUrl = urlMatch ? urlMatch[0] : '';
+    bubContent = '<div class="call-msg">&#128222; <strong>Anruf</strong><br/>' +
+      (jUrl ? '<a href="'+esc(jUrl)+'" target="_blank">Beitreten: '+esc(jUrl)+'</a>' : esc(content)) +
+      '</div>';
+  } else {
+    bubContent = '<span class="'+bub+'">'+esc(content)+'</span>';
+  }
+  return '<div class="'+cls+'">' +
+    senderLine +
+    bubContent + '<br/>' +
+    '<span class="msg-time" style="'+timeAlign+'">'+fmtT(m.created_at)+'</span>' +
+    '</div>';
+}
+
+function appendMsg(m) {
+  var w=document.getElementById('msgs'); if(!w) return;
+  var empty=w.querySelector('.empty-msg');
+  if(empty) empty.parentNode.removeChild(empty);
+  var d=document.createElement('div');
+  d.innerHTML=bubHtml(m);
+  while(d.firstChild) w.appendChild(d.firstChild);
+}
+
+function sendMsg() {
+  var inp=document.getElementById('msg-inp'); if(!inp) return;
+  var content=trim(inp.value);
+  if(!content||!activeConv||activeConv.accepted===false) return;
+  inp.value='';
+  var sname=myProfile?(myProfile.display_name||me.email.split('@')[0]):me.email.split('@')[0];
+  var tmpM={id:'tmp_'+Date.now(),conv_id:activeConv.id,sender_id:me.id,sender_name:sname,content:content,type:'text',created_at:new Date().toISOString()};
+  appendMsg(tmpM); scrollB();
+  knownMsgIds[activeConv.id]=knownMsgIds[activeConv.id]||{};
+  sbPost('messages', me.access_token, {conv_id:activeConv.id,sender_id:me.id,sender_name:sname,content:content,type:'text'}, function(data) {
+    if(data&&data.length&&data[0].id) {
+      knownMsgIds[activeConv.id][data[0].id]=true;
+      lastMsgTime=data[0].created_at;
+    }
+  });
+  sbPatch('conversations?id=eq.'+activeConv.id, me.access_token, {last_msg:content,updated_at:new Date().toISOString()}, function(){});
+  for(var i=0;i<allConvs.length;i++) {
+    if(allConvs[i].id===activeConv.id){allConvs[i].last_msg=content;allConvs[i].updated_at=new Date().toISOString();break;}
+  }
+  renderConvs(allConvs);
+}
+
+function hKey(e) {
+  var key=e.keyCode||e.which;
+  if(key===13){if(e.preventDefault)e.preventDefault();else e.returnValue=false;sendMsg();}
+}
+
+// ── NEUER CHAT ──
+function openNewChat() {
+  document.getElementById('search-user').value='';
+  document.getElementById('user-results').innerHTML='<div class="empty-msg">Tippe einen Namen ein...</div>';
+  openModal('m-newchat');
+}
+var stimer=null;
+function searchUsers(q) {
+  clearTimeout(stimer);
+  var el=document.getElementById('user-results');
+  q=trim(q);
+  if(!q){el.innerHTML='<div class="empty-msg">Tippe einen Namen ein...</div>';return;}
+  el.innerHTML='<div class="spinner-txt" style="padding:10px">Suchen...</div>';
+  stimer=setTimeout(function(){
+    sbGet('profiles?select=id,display_name,email,avatar_url', me.access_token, function(data){
+      if(!data){el.innerHTML='<div class="empty-msg" style="color:#f77">Fehler</div>';return;}
+      var l=q.toLowerCase(), hits=[];
+      for(var i=0;i<data.length;i++){
+        var u=data[i]; if(u.id===me.id) continue;
+        if((u.display_name||'').toLowerCase().indexOf(l)!==-1||(u.email||'').toLowerCase().indexOf(l)!==-1) hits.push(u);
+      }
+      if(!hits.length){el.innerHTML='<div class="empty-msg">Niemanden gefunden.</div>';return;}
+      var h='';
+      for(var i=0;i<hits.length;i++){
+        var u=hits[i];
+        h+='<div class="ur" onclick="startPM(\''+u.id+'\',\''+esc(u.display_name||u.email)+'\')">'+
+          '<div class="ur-name">'+esc(u.display_name||'Unbekannt')+'</div>'+
+          '<div class="ur-email">'+esc(u.email)+'</div>'+
+          '</div>';
+      }
+      el.innerHTML=h;
+    });
+  },400);
+}
+function startPM(otherId, otherName) {
+  closeModal('m-newchat');
+  for(var i=0;i<allConvs.length;i++){
+    var c=allConvs[i];
+    if(c.type==='private'&&c._other&&c._other.id===otherId){openConv(c);return;}
+  }
+  sbPost('conversations', me.access_token, {type:'private',updated_at:new Date().toISOString()}, function(data){
+    if(!data||!data.length){alert('Fehler!');return;}
+    var conv=data[0];
+    sbPost('participants', me.access_token,
+      [{conv_id:conv.id,user_id:me.id,accepted:true},{conv_id:conv.id,user_id:otherId,accepted:false}],
+      function(){
+        getProf(otherId,function(p){
+          conv._other=p||{id:otherId,display_name:otherName};
+          conv._display_name=(p&&p.display_name)||otherName;
+          conv._avatar_id=otherId; conv.accepted=true;
+          allConvs.unshift(conv);
+          currentTab='chats';
+          document.getElementById('sbt-chats').className='on';
+          document.getElementById('sbt-groups').className='';
+          renderConvs(allConvs); openConv(conv);
+        });
+      });
+  });
+}
+
+// ── NEUE GRUPPE ──
+function openNewGroup() {
+  grpMembers=[];
+  document.getElementById('grp-name').value='';
+  document.getElementById('grp-search').value='';
+  document.getElementById('grp-results').innerHTML='';
+  document.getElementById('grp-member-chips').innerHTML='';
+  openModal('m-newgroup');
+}
+var gtimer=null;
+function searchForGroup(q) {
+  clearTimeout(gtimer);
+  var el=document.getElementById('grp-results');
+  q=trim(q); if(!q){el.innerHTML='';return;}
+  gtimer=setTimeout(function(){
+    sbGet('profiles?select=id,display_name,email,avatar_url',me.access_token,function(data){
+      if(!data) return;
+      var l=q.toLowerCase(),hits=[];
+      for(var i=0;i<data.length;i++){
+        var u=data[i]; if(u.id===me.id) continue;
+        var already=false;
+        for(var j=0;j<grpMembers.length;j++) if(grpMembers[j].id===u.id){already=true;break;}
+        if(already) continue;
+        if((u.display_name||'').toLowerCase().indexOf(l)!==-1||(u.email||'').toLowerCase().indexOf(l)!==-1) hits.push(u);
+      }
+      if(!hits.length){el.innerHTML='<div class="empty-msg">Niemanden gefunden.</div>';return;}
+      var h='';
+      for(var i=0;i<hits.length;i++){
+        var u=hits[i];
+        h+='<div class="ur" onclick="addToGrp(\''+u.id+'\',\''+esc(u.display_name||u.email)+'\',\''+esc(u.email)+'\')">'+
+          '<div class="ur-name">'+esc(u.display_name||'Unbekannt')+'</div>'+
+          '<div class="ur-email">'+esc(u.email)+'</div>'+
+          '</div>';
+      }
+      el.innerHTML=h;
+    });
+  },400);
+}
+function addToGrp(id,name,email){
+  for(var i=0;i<grpMembers.length;i++) if(grpMembers[i].id===id) return;
+  grpMembers.push({id:id,name:name,email:email});
+  document.getElementById('grp-search').value='';
+  document.getElementById('grp-results').innerHTML='';
+  renderChips();
+}
+function rmFromGrp(id){
+  var nm=[];
+  for(var i=0;i<grpMembers.length;i++) if(grpMembers[i].id!==id) nm.push(grpMembers[i]);
+  grpMembers=nm; renderChips();
+}
+function renderChips(){
+  var h='';
+  for(var i=0;i<grpMembers.length;i++){
+    var m=grpMembers[i];
+    h+='<span class="chip">'+esc(m.name)+'<button onclick="rmFromGrp(\''+m.id+'\')">x</button></span>';
+  }
+  document.getElementById('grp-member-chips').innerHTML=h;
+}
+function createGroup(){
+  var name=trim(document.getElementById('grp-name').value);
+  if(!name){alert('Bitte Gruppenname eingeben!');return;}
+  if(!grpMembers.length){alert('Bitte mind. eine Person hinzufuegen!');return;}
+  sbPost('conversations',me.access_token,{type:'group',name:name,updated_at:new Date().toISOString()},function(data){
+    if(!data||!data.length){alert('Fehler!');return;}
+    var conv=data[0];
+    var pts=[{conv_id:conv.id,user_id:me.id,accepted:true}];
+    for(var i=0;i<grpMembers.length;i++) pts.push({conv_id:conv.id,user_id:grpMembers[i].id,accepted:true});
+    sbPost('participants',me.access_token,pts,function(){
+      conv._display_name=name;conv._avatar_id=conv.id;conv.accepted=true;
+      allConvs.unshift(conv);
+      closeModal('m-newgroup');
+      currentTab='groups';
+      document.getElementById('sbt-chats').className='';
+      document.getElementById('sbt-groups').className='on';
+      renderConvs(allConvs); openConv(conv);
+    });
+  });
+}
+
+// ── JITSI ANRUF ──
+function startCall() {
+  if (!activeConv || activeConv.type !== 'private') return;
+  // Raumname aus Conv-ID generieren (nur Buchstaben/Zahlen)
+  var roomId = 'marchat' + activeConv.id.replace(/[^a-zA-Z0-9]/g, '').slice(0, 20);
+  var jitsiUrl = 'https://meet.jit.si/' + roomId;
+  var sname = myProfile ? (myProfile.display_name || me.email.split('@')[0]) : me.email.split('@')[0];
+  // Link-Nachricht an die andere Person schicken
+  var callText = '[ANRUF] ' + sname + ' ruft an! Beitreten: ' + jitsiUrl;
+  sbPost('messages', me.access_token, {
+    conv_id: activeConv.id,
+    sender_id: me.id,
+    sender_name: sname,
+    content: callText,
+    type: 'text'
+  }, function(data) {
+    if (data && data.length && data[0].id) {
+      knownMsgIds[activeConv.id] = knownMsgIds[activeConv.id] || {};
+      knownMsgIds[activeConv.id][data[0].id] = true;
+      lastMsgTime = data[0].created_at;
+    }
+  });
+  sbPatch('conversations?id=eq.'+activeConv.id, me.access_token, {last_msg:'[ANRUF] '+sname+' ruft an!', updated_at:new Date().toISOString()}, function(){});
+  // Eigene Nachricht sofort anzeigen
+  var tmpM = {
+    id: 'tmp_call_'+Date.now(),
+    conv_id: activeConv.id,
+    sender_id: me.id,
+    sender_name: sname,
+    content: callText,
+    type: 'text',
+    created_at: new Date().toISOString()
+  };
+  appendMsg(tmpM);
+  scrollB();
+  // Jitsi in neuem Tab öffnen
+  window.open(jitsiUrl, '_blank');
+}
+
+// ── PROFIL CACHE ──
+function getProf(uid,cb){
+  if(profileCache[uid]){cb(profileCache[uid]);return;}
+  sbGet('profiles?id=eq.'+uid+'&limit=1',me.access_token,function(data){
+    if(data&&data.length){profileCache[uid]=data[0];cb(data[0]);}
+    else cb(null);
+  });
+}
+
+// ── PWA-INSTALLATION (Android) ──
+var deferredInstall = null;
+
+function initPWA() {
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js').catch(function(){});
+  }
+  window.addEventListener('beforeinstallprompt', function(e){
+    e.preventDefault();
+    deferredInstall = e;
+    var skip = false;
+    try { skip = !!localStorage.getItem('cf_nodismiss'); } catch(ex) {}
+    if (!skip) {
+      setTimeout(function(){
+        document.getElementById('install-banner').style.display = 'block';
+      }, 3000);
+    }
+  });
+  window.addEventListener('appinstalled', function(){
+    document.getElementById('install-banner').style.display = 'none';
+    deferredInstall = null;
+  });
+}
+
+function doInstall() {
+  if (!deferredInstall) return;
+  deferredInstall.prompt();
+  deferredInstall.userChoice.then(function(){
+    deferredInstall = null;
+    document.getElementById('install-banner').style.display = 'none';
+  });
+}
+
+function dismissInstall() {
+  document.getElementById('install-banner').style.display = 'none';
+  try { localStorage.setItem('cf_nodismiss', '1'); } catch(ex) {}
+}
+
+// ── INIT ──
+(function(){
+  initPWA();
+  var sess=loadSession();
+  if(sess&&sess.access_token){
+    xhr('GET',SUPA_URL+'/auth/v1/user',null,sess.access_token,function(data,err){
+      if(!err&&data&&data.id) onLogin(sess);
+      else clearSession();
+    });
+  }
+})();
+</script>
+
+<div id="install-banner">
+  <table><tr>
+    <td>
+      <div class="ib-txt">MarChat installieren</div>
+      <div class="ib-sub">Als App auf dem Homescreen speichern</div>
+    </td>
+    <td class="ib-btns">
+      <button class="btn-sm" onclick="doInstall()">Installieren</button>
+      <button class="btn-sm-g" onclick="dismissInstall()">X</button>
+    </td>
+  </tr></table>
+</div>
+</body>
+</html>
