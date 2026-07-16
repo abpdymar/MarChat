@@ -1,6 +1,6 @@
-{
-  "name": "ChatFlow",
-  "short_name": "ChatFlow",
+{ 
+  "name": "MarChat",
+  "short_name": "MarChat",
   "description": "Dein persönlicher Chat — sicher, schnell, überall",
   "start_url": "./index.html",
   "scope": "./",
